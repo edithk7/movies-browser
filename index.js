@@ -76,7 +76,7 @@ function createMoviesTable() {
     for (j = 0; j < columns; j++) {
       var td = document.createElement('td');
       var img = document.createElement('img');
-      img.src = "selena.jpg";
+      img.src = "kitty.jpg";
       img.setAttribute("id", "movieImg" + (i*(rows + 1) + j).toString());
       td.appendChild(img);
       tr.appendChild(td);
