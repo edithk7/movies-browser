@@ -3,7 +3,7 @@ var open = require('open');
 var remote = require('electron').remote;
 var BrowserWindow = remote.BrowserWindow;
 
-var rows = 5;
+var rows = 3;
 var columns = 5;
 var moviesList = [];
 var magnetLinks = {};
@@ -53,7 +53,13 @@ function fillMoviePoster(movieName, id) {
         var title = document.getElementById("movieTitle"+id);
         var info = document.getElementById("movieInfo"+id);
         title.innerText = movieInfo["Title"];
-        info.innerText = movieInfo["Plot"];
+
+        var movieInfoText = "<b>Year</b>: " + movieInfo["Year"] + "<br/>";
+        movieInfoText += "<b>Genre</b>: " + movieInfo["Genre"] + "<br/>";
+        movieInfoText += "<b>Actors</b>: " + movieInfo["Actors"] + "<br/>";
+        movieInfoText += "<b>Rating</b>: " + movieInfo["imdbRating"] + "<br/><br/>";
+        movieInfoText += "<b>Plot</b>: " + movieInfo["Plot"];
+        info.innerHTML = movieInfoText;
 
         var deleteButton = document.createElement("input");
         var downloadButton = document.createElement("input");
