@@ -1,37 +1,44 @@
+var fs = require('fs');
+var open = require('open');
+var remote = require('electron').remote;
+var BrowserWindow = remote.BrowserWindow;
+
 var rows = 5;
-var columns = 6;
+var columns = 5;
 var moviesList = [];
+var magnetLinks = {};
 createMoviesTable();
 loadMovies();
 
-function loadMovies(rows, columns) {
+function loadMovies() {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
-    if (this.readyState == this.DONE) {
-      if (this.status == 200) {
-        // Get xml response
-        var doc = $.parseXML(xhttp.response);
-        $xml = $(doc);
-        $title = $xml.find("title");
+    if (this.readyState == this.DONE && this.status == 200) {
+      var doc = $.parseXML(xhttp.response);
+      $xml = $(doc);
+      $titles = $xml.find("title");
+      $links = $xml.find("link");
 
-        // iterate movies
-        $($title).each(function(index, value) {
-          if (index > 0) {
-            $movieName = value.textContent.toLowerCase();
-            if ($movieName.includes("french")) return; // continue in jquery
-            $movieName = getMovieName($movieName);
-            if (!moviesList.includes($movieName)) {
-              moviesList.push($movieName);
-            }
-          }
-        });
-      }
-      else {
-        moviesList.append("failed");
+      var deletedMovies = fs.readFileSync("deletedMovies.txt");
+      for (i = 0; i < $titles.length; i++) {
+        if (i == 0) continue;
+        $movieName = $titles[i].textContent.toLowerCase();
+        $movieName = getMovieName($movieName);
+
+        // skip french movies
+        if ($movieName.includes("french")) continue; // continue in jquery
+
+        // skip deleted movies
+        if (deletedMovies.indexOf($movieName) != -1) continue;
+
+        if (!moviesList.includes($movieName)) {
+          moviesList.push($movieName);
+          magnetLinks[$movieName] = $links[i].textContent;
+        }
       }
       populateMoviesTable();
     }
-  }
+  };
   xhttp.open("GET", "https://thepiratebay.org/rss/top100/207", true);
   xhttp.send();
 }
@@ -42,8 +49,42 @@ function fillMoviePoster(movieName, id) {
     if (this.readyState == this.DONE) {
       if (this.status == 200) {
         var movieInfo = $.parseJSON(jsonhttp.response);
-        var img = document.getElementById(id);
-        img.src = movieInfo['Poster'];
+        var img = document.getElementById("movieImg"+id);
+        var title = document.getElementById("movieTitle"+id);
+        var info = document.getElementById("movieInfo"+id);
+        title.innerText = movieInfo["Title"];
+        info.innerText = movieInfo["Plot"];
+
+        var deleteButton = document.createElement("input");
+        var downloadButton = document.createElement("input");
+
+        deleteButton.setAttribute("type", "image");
+        deleteButton.src = "delete.png";
+        deleteButton.setAttribute("height", "50px");
+        deleteButton.setAttribute("width", "50px");
+        deleteButton.setAttribute("class", "delete_button");
+        deleteButton.addEventListener('click', function() {
+          deleteMovie(movieName);
+        });
+
+        downloadButton.setAttribute("type", "image");
+        downloadButton.src = "download.png";
+        downloadButton.setAttribute("height", "50px");
+        downloadButton.setAttribute("width", "50px");
+        downloadButton.setAttribute("class", "download_button");
+        downloadButton.addEventListener('click', function() {
+          downloadMovie(movieName);
+        });
+
+        info.appendChild(downloadButton);
+        info.appendChild(deleteButton);
+
+        if (movieInfo["Poster"] != "N/A") {
+          img.src = movieInfo['Poster'];
+        }
+        else {
+          img.src = "NA.jpg";
+        }
       }
       else {
         alert("error");
@@ -74,11 +115,38 @@ function createMoviesTable() {
   for (i = 0; i < rows; i++) {
     var tr = document.createElement('tr');
     for (j = 0; j < columns; j++) {
+      var id = (i*columns + j).toString();
+
       var td = document.createElement('td');
-      var img = document.createElement('img');
-      img.src = "kitty.jpg";
-      img.setAttribute("id", "movieImg" + (i*(rows + 1) + j).toString());
-      td.appendChild(img);
+      var container = document.createElement("div");
+      var article = document.createElement("article");
+      var poster = document.createElement('img');
+      var captionOverlay = document.createElement("div");
+      var title = document.createElement("h1");
+      var content = document.createElement("p");
+
+
+      container.setAttribute("class","container");
+      article.setAttribute("class", "caption");
+      poster.src = "princess_bell.jpg";
+      poster.setAttribute("id", "movieImg" + id);
+      poster.setAttribute("class", "caption__media");
+      captionOverlay.setAttribute("class", "caption__overlay");
+      title.setAttribute("class", "caption__overlay__title");
+      title.setAttribute("id", "movieTitle" + id);
+      content.setAttribute("class", "caption__overlay__content");
+      content.setAttribute("id", "movieInfo" + id);
+
+      title.innerText = "Harry Potter And The Integrated Zone";
+      content.innerText = "Harry learns how to set up the Active Directory Domain Name Services Integrated Zone.";
+
+      captionOverlay.appendChild(title);
+      captionOverlay.appendChild(content);
+      article.appendChild(poster);
+      article.appendChild(captionOverlay);
+      container.appendChild(article);
+
+      td.appendChild(article);
       tr.appendChild(td);
     }
     table.appendChild(tr);
@@ -87,16 +155,22 @@ function createMoviesTable() {
 
 function populateMoviesTable() {
   for (i = 0; i < rows*columns; i++) {
-    fillMoviePoster(moviesList[i], "movieImg" + i);
+    fillMoviePoster(moviesList[i], i.toString());
   }
 }
 
-// Bind min/max/close buttons
+function deleteMovie(movieName) {
+  fs.appendFile('deletedMovies.txt', movieName + "\n");
+  remote.getCurrentWindow().reload();
+}
+
+function downloadMovie(movieName) {
+  var link = magnetLinks[movieName];
+  open(link);
+}
+
+// Bind delete/download/min/max/close buttons
 (function () {
-
-  var remote = require('electron').remote;
-  var BrowserWindow = remote.BrowserWindow;
-
   function init() {
     document.getElementById("min-btn").addEventListener("click", function (e) {
       var window = BrowserWindow.getFocusedWindow();
@@ -118,10 +192,10 @@ function populateMoviesTable() {
     });
   };
 
+
   document.onreadystatechange = function () {
     if (document.readyState == "complete") {
       init();
     }
   };
-
 })();
