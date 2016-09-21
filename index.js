@@ -1,6 +1,7 @@
 var fs = require('fs');
 var open = require('open');
 var remote = require('electron').remote;
+const electronImageResize = require('electron-image-resize');
 var BrowserWindow = remote.BrowserWindow;
 
 var moviesList = [];
@@ -103,7 +104,25 @@ function fillMoviePoster(movieName, id) {
         content.appendChild(deleteButton);
 
         if (movieInfo["Poster"] != "N/A") {
-          poster.src = movieInfo['Poster'];
+          var cachedImage = movieName + '.jpg';
+
+          // download image if needed
+          fs.stat(cachedImage, function(err, stat) {
+            if(err != null) {
+              poster.src = movieInfo["Poster"];
+              electronImageResize({
+                url: movieInfo['Poster'],
+                width: 300,
+                height: 445
+              }).then(img => {
+                // save it as a png file
+                fs.writeFileSync(movieName+'.jpg', img.toJpeg(100));
+              })
+            }
+            else {
+              poster.src = cachedImage;
+            }
+          });
         }
         else {
           poster.src = "NA.jpg";

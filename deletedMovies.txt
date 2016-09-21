@@ -1,15 +1,6 @@
-the dark knight
-kingsman: the secret service
-the secret life of pets
-zootopia
-cafe society
-guardians of the galaxy
-room
-the good dinosaur
-ice age: collision course
 inception
-minions
-harry potter and the half blood prince
+ice age: collision course
+kingsman: the secret service
 the mechanic
 creed
 the man who knew infinity
@@ -56,3 +47,10 @@ bridge of spies
 gone girl
 the hateful eight
 ex machina
+kingsglaive: final fantasy xv
+zootopia
+the secret life of pets
+room
+the good dinosaur
+guardians of the galaxy
+the dark knight

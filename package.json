@@ -1,5 +1,8 @@
 {
-  "name"    : "PBBrowser",
-  "version" : "0.1.0",
-  "main"    : "main.js"
+  "name": "PBBrowser",
+  "version": "0.1.0",
+  "main": "main.js",
+  "dependencies": {
+    "electron-image-resize": "^1.2.4"
+  }
 }
