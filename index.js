@@ -176,7 +176,9 @@ function populateMoviesTable() {
 
 function deleteMovie(movieName) {
   fs.appendFile('deletedMovies.txt', movieName + "\n");
-  remote.getCurrentWindow().reload();
+  $("#loading-img").fadeIn();
+  $("#movies-table-container").fadeOut();
+  setTimeout(function() { loadMovies(); }, 1000);
 }
 
 function downloadMovie(movieName) {
