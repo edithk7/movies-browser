@@ -49,7 +49,7 @@ body {
 }
 
 #movies-table-container {
-  height: 93vh;
+  height: 96vh;
   overflow: auto;
   display: none;
 }
