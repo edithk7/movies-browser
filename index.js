@@ -7,10 +7,13 @@ var rows = 3;
 var columns = 5;
 var moviesList = [];
 var magnetLinks = {};
+
 createMoviesTable();
 loadMovies();
 
 function loadMovies() {
+  moviesList = [];
+  magnetLinks = {};
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == this.DONE && this.status == 200) {
@@ -90,6 +93,12 @@ function fillMoviePoster(movieName, id) {
         }
         else {
           img.src = "NA.jpg";
+        }
+
+        // After all info is ready, present table
+        if (id == rows*columns - 1) {
+          $("#loading-img").fadeOut(500);
+          $("#movies-table-container").fadeIn(1000);
         }
       }
       else {

@@ -4,9 +4,6 @@ the jungle book
 the nice guys
 captain america civil war
 teenage mutant ninja turtles out of the shadows
-warcraft
-neighbors 2
-deadpool
 alice through the looking glass
 the purge: election year
 me before you
@@ -50,3 +47,5 @@ harry potter and the half blood prince
 the mechanic
 creed
 the man who knew infinity
+warcraft
+deadpool

@@ -9,6 +9,12 @@ body {
   margin: 0px;
 }
 
+#loading-img {
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+
 #title-bar {
   -webkit-app-region: drag;
   height: 30px;
@@ -45,6 +51,7 @@ body {
 #movies-table-container {
   height: 93vh;
   overflow: auto;
+  display: none;
 }
 
 #movies-table {
@@ -53,6 +60,7 @@ body {
 
 #movies-table .caption__media {
   width: 30vw;
+  height: 50.226vh;
 }
 
 h1, p {

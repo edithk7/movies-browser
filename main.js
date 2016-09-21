@@ -1,13 +1,31 @@
 const {app, BrowserWindow} = require('electron')
-app.commandLine.appendSwitch('disable-smooth-scrolling');
+app.commandLine.appendSwitch('disable-smooth-scrolling')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 
 function createWindow () {
+  // calc primary display screen center
+  var screen = require('electron').screen
+  var primaryDisplay = screen.getPrimaryDisplay()
+
+  var windowHeight = 900
+  var windowWidth = 1600
+  var displayHeight = primaryDisplay.bounds.height
+  var displayWidth = primaryDisplay.bounds.width
+
+  var center_y = (displayHeight - windowHeight) / 2
+  var center_x = (displayWidth - windowWidth) / 2
+
   // Create the browser window.
-  win = new BrowserWindow({width: 1600, height: 900, frame: false, backgroundColor: '#333333', center: true})
+  win = new BrowserWindow({
+    width: windowWidth, height: windowHeight,
+    frame: false,
+    backgroundColor: '#333333',
+    x: 1360 + center_x, // need to make this portable...
+    y: center_y
+  })
 
   // and load the index.html of the app.
   win.loadURL(`file://${__dirname}/index.html`)
