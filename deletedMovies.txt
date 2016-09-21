@@ -1,26 +1,3 @@
-31
-inside out
-mad max: fury road
-batman v superman dawn of justice
-hardcore henry
-interstellar
-money monster
-spectre
-angry birds
-teenage mutant ninja turtles 2
-central intelligence
-fifty shades of grey
-avengers: age of ultron
-star wars episode vii the force awakens
-interrogation
-ex machina
-the hateful eight
-bridge of spies
-the wolf of wall street
-kingsglaive: final fantasy xv
-now you see me
-criminal
-gone girl
 the dark knight
 kingsman: the secret service
 the secret life of pets
@@ -50,3 +27,32 @@ skiptrace
 the purge: election year
 imperium
 me before you
+amerigeddon
+popstar never stop never stopping
+kickboxer vengeance
+keanu
+the boss
+spectre
+money monster
+interstellar
+the legend of tarzan
+neighbors 2 sorority rising
+teenage mutant ninja turtles 2
+fifty shades of grey
+inside out
+31
+angry birds
+batman v superman dawn of justice
+hardcore henry
+star wars episode vii the force awakens
+mad max: fury road
+central intelligence
+interrogation
+now you see me
+criminal
+avengers: age of ultron
+the wolf of wall street
+bridge of spies
+gone girl
+the hateful eight
+ex machina

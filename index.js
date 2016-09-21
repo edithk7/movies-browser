@@ -3,17 +3,16 @@ var open = require('open');
 var remote = require('electron').remote;
 var BrowserWindow = remote.BrowserWindow;
 
-var rows = 3;
-var columns = 5;
 var moviesList = [];
 var magnetLinks = {};
 
-createMoviesTable();
 loadMovies();
 
 function loadMovies() {
   moviesList = [];
   magnetLinks = {};
+  $("#movies-container").remove();
+
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == this.DONE && this.status == 200) {
@@ -51,18 +50,33 @@ function fillMoviePoster(movieName, id) {
   jsonhttp.onreadystatechange = function() {
     if (this.readyState == this.DONE) {
       if (this.status == 200) {
-        var movieInfo = $.parseJSON(jsonhttp.response);
-        var img = document.getElementById("movieImg"+id);
-        var title = document.getElementById("movieTitle"+id);
-        var info = document.getElementById("movieInfo"+id);
-        title.innerText = movieInfo["Title"];
+        var container = document.createElement("div");
+        var article = document.createElement("article");
+        var poster = document.createElement('img');
+        var captionOverlay = document.createElement("div");
+        var title = document.createElement("h1");
+        var content = document.createElement("p");
 
-        var movieInfoText = "<b>Year</b>: " + movieInfo["Year"] + "<br/>";
+        container.setAttribute("class","container");
+        article.setAttribute("class", "caption");
+        poster.setAttribute("class", "caption__media");
+        captionOverlay.setAttribute("class", "caption__overlay");
+        content.setAttribute("class", "caption__overlay__content");
+
+        captionOverlay.appendChild(content);
+        article.appendChild(poster);
+        article.appendChild(captionOverlay);
+        container.appendChild(article);
+
+        var movieInfo = $.parseJSON(jsonhttp.response);
+
+        var movieInfoText = "<b><h1>" + movieInfo["Title"] + "</h1></b>";
+        movieInfoText += "<b>Year</b>: " + movieInfo["Year"] + "<br/>";
         movieInfoText += "<b>Genre</b>: " + movieInfo["Genre"] + "<br/>";
         movieInfoText += "<b>Actors</b>: " + movieInfo["Actors"] + "<br/>";
         movieInfoText += "<b>Rating</b>: " + movieInfo["imdbRating"] + "<br/><br/>";
         movieInfoText += "<b>Plot</b>: " + movieInfo["Plot"];
-        info.innerHTML = movieInfoText;
+        content.innerHTML = movieInfoText;
 
         var deleteButton = document.createElement("input");
         var downloadButton = document.createElement("input");
@@ -85,20 +99,22 @@ function fillMoviePoster(movieName, id) {
           downloadMovie(movieName);
         });
 
-        info.appendChild(downloadButton);
-        info.appendChild(deleteButton);
+        content.appendChild(downloadButton);
+        content.appendChild(deleteButton);
 
         if (movieInfo["Poster"] != "N/A") {
-          img.src = movieInfo['Poster'];
+          poster.src = movieInfo['Poster'];
         }
         else {
-          img.src = "NA.jpg";
+          poster.src = "NA.jpg";
         }
 
+        document.getElementById("movies-container").appendChild(container);
+
         // After all info is ready, present table
-        if (id == rows*columns - 1) {
+        if (id == moviesList.length - 1) {
           $("#loading-img").fadeOut(500);
-          $("#movies-table-container").fadeIn(1000);
+          $("#movies-container").fadeIn(1000);
         }
       }
       else {
@@ -125,60 +141,20 @@ function getMovieName(movieString) {
   }
 }
 
-function createMoviesTable() {
-  var table = document.getElementById('movies-table');
-  for (i = 0; i < rows; i++) {
-    var tr = document.createElement('tr');
-    for (j = 0; j < columns; j++) {
-      var id = (i*columns + j).toString();
-
-      var td = document.createElement('td');
-      var container = document.createElement("div");
-      var article = document.createElement("article");
-      var poster = document.createElement('img');
-      var captionOverlay = document.createElement("div");
-      var title = document.createElement("h1");
-      var content = document.createElement("p");
-
-
-      container.setAttribute("class","container");
-      article.setAttribute("class", "caption");
-      poster.src = "princess_bell.jpg";
-      poster.setAttribute("id", "movieImg" + id);
-      poster.setAttribute("class", "caption__media");
-      captionOverlay.setAttribute("class", "caption__overlay");
-      title.setAttribute("class", "caption__overlay__title");
-      title.setAttribute("id", "movieTitle" + id);
-      content.setAttribute("class", "caption__overlay__content");
-      content.setAttribute("id", "movieInfo" + id);
-
-      title.innerText = "Harry Potter And The Integrated Zone";
-      content.innerText = "Harry learns how to set up the Active Directory Domain Name Services Integrated Zone.";
-
-      captionOverlay.appendChild(title);
-      captionOverlay.appendChild(content);
-      article.appendChild(poster);
-      article.appendChild(captionOverlay);
-      container.appendChild(article);
-
-      td.appendChild(article);
-      tr.appendChild(td);
-    }
-    table.appendChild(tr);
-  }
-}
-
 function populateMoviesTable() {
-  for (i = 0; i < rows*columns; i++) {
-    fillMoviePoster(moviesList[i], i.toString());
+  var moviesContainer = document.createElement("div");
+  moviesContainer.setAttribute("id", "movies-container");
+  $("#main-section").append(moviesContainer);
+  for (i = 0; i < moviesList.length; i++) {
+    fillMoviePoster(moviesList[i], i);
   }
 }
 
 function deleteMovie(movieName) {
   fs.appendFile('deletedMovies.txt', movieName + "\n");
   $("#loading-img").fadeIn();
-  $("#movies-table-container").fadeOut();
-  setTimeout(function() { loadMovies(); }, 1000);
+  $("#movies-container").fadeOut();
+  setTimeout(function() { loadMovies(); }, 750);
 }
 
 function downloadMovie(movieName) {
