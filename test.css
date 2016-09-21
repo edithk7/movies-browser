@@ -1,132 +1,100 @@
-#photos {
-  -webkit-column-count: 5;
-  -webkit-column-gap:   0px;
-  -moz-column-count:    5;
-  -moz-column-gap:      0px;
-  column-count:         5;
-  column-gap:           0px;
+#rig {
+    width: 100%;
+    margin:0 auto; /*center aligned*/
+    padding:0;
+    font-size:0; /* Remember to change it back to normal font size if have captions */
+    list-style:none;
+    background-color:#000;
+}
+#rig li {
+    display: inline-block;
+    *display:inline;/*for IE6 - IE7*/
+    width:25%;
+    vertical-align:middle;
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-#photos .caption__media {
-  width: 100%;
-  height: auto;
+/* The wrapper for each item */
+.rig-cell {
+    display:block;
+    position: relative;
+    overflow:hidden;
 }
 
-@media (max-width: 1200px) {
-  #photos {
-  -moz-column-count:    4;
-  -webkit-column-count: 4;
-  column-count:         4;
-  }
-}
-@media (max-width: 1000px) {
-  #photos {
-  -moz-column-count:    3;
-  -webkit-column-count: 3;
-  column-count:         3;
-  }
-}
-@media (max-width: 800px) {
-  #photos {
-  -moz-column-count:    2;
-  -webkit-column-count: 2;
-  column-count:         2;
-  }
-}
-@media (max-width: 400px) {
-  #photos {
-  -moz-column-count:    1;
-  -webkit-column-count: 1;
-  column-count:         1;
-  }
+/* If have the image layer */
+.rig-img {
+    display:block;
+    width: 100%;
+    height: auto;
+    border:none;
+    transform:scale(1);
+    transition:all 1s;
 }
 
-h1, p {
-  margin: 0;
-  padding: 0 0 .5em;
+#rig li:hover .rig-img {
+    transform:scale(1.05);
 }
 
-.container {
-  margin: 0 auto;
-  max-width: 480px;
+/* If have the overlay layer */
+.rig-overlay {
+    position: absolute;
+    display:block;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    background: #333333;
+    opacity:0;
+    filter:alpha(opacity=0);/*For IE6 - IE8*/
+    transition:all 0.6s;
+}
+#rig li:hover .rig-overlay {
+    opacity:0.8;
 }
 
-/*
-* Caption component
-*/
-.caption {
-  position: relative;
-  overflow: hidden;
-
-  /* Only the -webkit- prefix is required these days */
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+/* If have captions */
+.rig-text {
+    display:block;
+    padding:0 30px;
+    box-sizing:border-box;
+    position:absolute;
+    left:0;
+    width:100%;
+    text-align:center;
+    text-transform:capitalize;
+    font-size:18px;
+    font-weight:bold;
+    font-family: 'Oswald', sans-serif;
+    font-weight:normal!important;
+    top:40%;
+    color:white;
+    opacity:0;
+    filter:alpha(opacity=0);/*For older IE*/
+    transform:translateY(-20px);
+    transition:all .3s;
+}
+#rig li:hover .rig-text {
+    transform:translateY(0px);
+    opacity:0.9;
 }
 
-.caption::before {
-  content: ' ';
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: transparent;
-  transition: background .35s ease-out;
+@media (max-width: 9000px) {
+    #rig li {
+        width:25%;
+    }
 }
 
-.caption:hover::before {
-  background: rgba(0, 0, 0, .5);
+@media (max-width: 700px) {
+    #rig li {
+        width:33.33%;
+    }
 }
 
-.caption__media {
-  display: block;
-  min-width: 100%;
-  max-width: 100%;
-  height: auto;
-}
-
-.caption__overlay {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  padding: 10px;
-  color: white;
-
-  -webkit-transform: translateY(100%);
-  transform: translateY(100%);
-
-  transition: -webkit-transform .35s ease-out;
-  transition:         transform .35s ease-out;
-}
-
-.caption:hover .caption__overlay {
-  -webkit-transform: translateY(0);
-  transform: translateY(0);
-}
-
-.caption__overlay__title {
-  -webkit-transform: translateY( -webkit-calc(-100% - 10px) );
-  transform: translateY( calc(-100% - 10px) );
-
-  transition: -webkit-transform .35s ease-out;
-  transition:         transform .35s ease-out;
-}
-
-.caption:hover .caption__overlay__title {
-  -webkit-transform: translateY(0);
-  transform: translateY(0);
-}
-
-.delete_button {
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-}
-
-.download_button {
-  position: absolute;
-  bottom: 5px;
-  left: 5px;
+@media (max-width: 550px) {
+    #rig li {
+        width:50%;
+    }
 }

@@ -12,7 +12,7 @@ loadMovies();
 function loadMovies() {
   moviesList = [];
   magnetLinks = {};
-  $("#movies-container").remove();
+  $("#rig").remove();
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
@@ -51,23 +51,21 @@ function fillMoviePoster(movieName, id) {
   jsonhttp.onreadystatechange = function() {
     if (this.readyState == this.DONE) {
       if (this.status == 200) {
-        var container = document.createElement("div");
-        var article = document.createElement("article");
-        var poster = document.createElement('img');
-        var captionOverlay = document.createElement("div");
-        var title = document.createElement("h1");
-        var content = document.createElement("p");
+        var li = document.createElement("li");
+        var rig_cell = document.createElement("div");
+        var rig_img = document.createElement('img');
+        var rig_overlay = document.createElement("span");
+        var rig_text = document.createElement("span");
 
-        container.setAttribute("class","container");
-        article.setAttribute("class", "caption");
-        poster.setAttribute("class", "caption__media");
-        captionOverlay.setAttribute("class", "caption__overlay");
-        content.setAttribute("class", "caption__overlay__content");
+        rig_cell.setAttribute("class", "rig-cell");
+        rig_img.setAttribute("class", "rig-img");
+        rig_overlay.setAttribute("class", "rig-overlay");
+        rig_text.setAttribute("class", "rig-text");
 
-        captionOverlay.appendChild(content);
-        article.appendChild(poster);
-        article.appendChild(captionOverlay);
-        container.appendChild(article);
+        rig_cell.appendChild(rig_img);
+        rig_cell.appendChild(rig_overlay);
+        rig_cell.appendChild(rig_text);
+        li.appendChild(rig_cell);
 
         var movieInfo = $.parseJSON(jsonhttp.response);
 
@@ -77,7 +75,12 @@ function fillMoviePoster(movieName, id) {
         movieInfoText += "<b>Actors</b>: " + movieInfo["Actors"] + "<br/>";
         movieInfoText += "<b>Rating</b>: " + movieInfo["imdbRating"] + "<br/><br/>";
         movieInfoText += "<b>Plot</b>: " + movieInfo["Plot"];
-        content.innerHTML = movieInfoText;
+
+        if (movieInfoText.length > 400) {
+          rig_text.style.fontSize = "14px";
+        }
+
+        rig_text.innerHTML = movieInfoText;
 
         var deleteButton = document.createElement("input");
         var downloadButton = document.createElement("input");
@@ -100,8 +103,8 @@ function fillMoviePoster(movieName, id) {
           downloadMovie(movieName);
         });
 
-        content.appendChild(downloadButton);
-        content.appendChild(deleteButton);
+        rig_overlay.appendChild(downloadButton);
+        rig_overlay.appendChild(deleteButton);
 
         if (movieInfo["Poster"] != "N/A") {
           var cachedImage = movieName + '.jpg';
@@ -109,7 +112,7 @@ function fillMoviePoster(movieName, id) {
           // download image if needed
           fs.stat(cachedImage, function(err, stat) {
             if(err != null) {
-              poster.src = movieInfo["Poster"];
+              rig_img.src = movieInfo["Poster"];
               electronImageResize({
                 url: movieInfo['Poster'],
                 width: 300,
@@ -120,20 +123,20 @@ function fillMoviePoster(movieName, id) {
               })
             }
             else {
-              poster.src = cachedImage;
+              rig_img.src = cachedImage;
             }
           });
         }
         else {
-          poster.src = "NA.jpg";
+          rig_img.src = "NA.jpg";
         }
 
-        document.getElementById("movies-container").appendChild(container);
+        document.getElementById("rig").appendChild(li);
 
         // After all info is ready, present table
         if (id == moviesList.length - 1) {
           $("#loading-img").fadeOut(500);
-          $("#movies-container").fadeIn(1000);
+          $("#rig").fadeIn(1000);
         }
       }
       else {
@@ -149,6 +152,7 @@ function fillMoviePoster(movieName, id) {
 
 function getMovieName(movieString) {
   movieString = movieString.replace(/\./g, ' ');
+  movieString = movieString.replace(/:/g, '');
   var re = /\d{4}/;
   var match = re.exec(movieString);
   if (match != null) {
@@ -161,8 +165,8 @@ function getMovieName(movieString) {
 }
 
 function populateMoviesTable() {
-  var moviesContainer = document.createElement("div");
-  moviesContainer.setAttribute("id", "movies-container");
+  var moviesContainer = document.createElement("ul");
+  moviesContainer.setAttribute("id", "rig");
   $("#main-section").append(moviesContainer);
   for (i = 0; i < moviesList.length; i++) {
     fillMoviePoster(moviesList[i], i);
@@ -172,7 +176,7 @@ function populateMoviesTable() {
 function deleteMovie(movieName) {
   fs.appendFile('deletedMovies.txt', movieName + "\n");
   $("#loading-img").fadeIn();
-  $("#movies-container").fadeOut();
+  $("#rig").fadeOut();
   setTimeout(function() { loadMovies(); }, 750);
 }
 

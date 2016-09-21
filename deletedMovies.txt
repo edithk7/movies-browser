@@ -1,7 +1,3 @@
-inception
-ice age: collision course
-kingsman: the secret service
-the mechanic
 creed
 the man who knew infinity
 warcraft
@@ -54,3 +50,11 @@ room
 the good dinosaur
 guardians of the galaxy
 the dark knight
+cafe society
+minions
+harry potter and the half blood prince
+ice age collision course
+the purge election year
+avengers age of ultron
+mad max fury road
+kingsman the secret service
