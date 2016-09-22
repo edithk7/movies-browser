@@ -19,13 +19,26 @@ function createWindow () {
   var center_x = (displayWidth - windowWidth) / 2
 
   // Create the browser window.
-  win = new BrowserWindow({
-    width: windowWidth, height: windowHeight,
-    frame: false,
-    backgroundColor: '#333333',
-    x: 1360 + center_x, // need to make this portable...
-    y: center_y
-  })
+  if (process.platform == "linux") {
+    win = new BrowserWindow({
+      width: windowWidth, height: windowHeight,
+      frame: true,
+      backgroundColor: '#333333',
+      darkTheme: true,
+      x: 1360 + center_x, // need to make this portable...
+      y: center_y
+    })
+    win.setMenu(null);
+  }
+  else {
+    win = new BrowserWindow({
+      width: windowWidth, height: windowHeight,
+      frame: false,
+      backgroundColor: '#333333',
+      x: center_x,
+      y: center_y
+    })
+  }
 
   // and load the index.html of the app.
   win.loadURL(`file://${__dirname}/index.html`)

@@ -5,6 +5,35 @@ var remote = require('electron').remote;
 var electronImageResize = require('electron-image-resize');
 var BrowserWindow = remote.BrowserWindow;
 
+// build titlebar if not on linux
+if (remote.process.platform != "linux") {
+  var title_bar = document.createElement("div");
+  var title = document.createElement("div");
+  var title_bar_btns = document.createElement("div");
+  var min_btn = document.createElement("button");
+  var max_btn = document.createElement("button");
+  var close_btn = document.createElement("button");
+
+  title_bar.setAttribute("id", "title-bar");
+  title.setAttribute("id", "title");
+  title_bar_btns.setAttribute("id", "title-bar-btns");
+  min_btn.setAttribute("id", "min-btn");
+  min_btn.setAttribute("class", "button");
+  max_btn.setAttribute("id", "max-btn");
+  max_btn.setAttribute("class", "button");
+  close_btn.setAttribute("id", "close-btn");
+  close_btn.setAttribute("class", "button");
+
+  title_bar_btns.appendChild(min_btn);
+  title_bar_btns.appendChild(max_btn);
+  title_bar_btns.appendChild(close_btn);
+
+  title_bar.appendChild(title);
+  title_bar.appendChild(title_bar_btns);
+
+  document.body.appendChild(title_bar);
+}
+
 var moviesList = [];
 var magnetLinks = {};
 var moviesYears = {};
