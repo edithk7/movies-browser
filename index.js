@@ -10,7 +10,7 @@ var magnetLinks = {};
 var moviesYears = {};
 var moviesIds = {};
 var movieYear = 0;
-var deletedMoviesFile = path.join(__dirname, "deletedMovies.txt");
+var deletedMoviesFile = path.join(__dirname, "cache/deletedMovies.txt");
 
 loadMovies();
 
@@ -23,6 +23,13 @@ function loadMovies() {
       $titles = $xml.find("title");
       $links = $xml.find("link");
 
+      try {
+        fs.statSync(deletedMoviesFile);
+      }
+      catch(err) {
+        fs.writeFileSync(deletedMoviesFile, "");
+      }
+      
       var deletedMovies = fs.readFileSync(deletedMoviesFile);
       for (i = 0; i < $titles.length; i++) {
         if (i == 0) continue;
