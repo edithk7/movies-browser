@@ -1,0 +1,2 @@
+*.jpg    #Exclude all dlls
+!NA.jpg #Except for foo.dll
