@@ -2,7 +2,7 @@ var fs = require('fs');
 var open = require('open');
 var path = require('path');
 var remote = require('electron').remote;
-const electronImageResize = require('electron-image-resize');
+var electronImageResize = require('electron-image-resize');
 var BrowserWindow = remote.BrowserWindow;
 
 var moviesList = [];
@@ -15,12 +15,6 @@ var deletedMoviesFile = path.join(__dirname, "deletedMovies.txt");
 loadMovies();
 
 function loadMovies() {
-  moviesList = [];
-  magnetLinks = {};
-  moviesYears = {};
-  moviesIds = {};
-  $("#rig").remove();
-
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == this.DONE && this.status == 200) {
@@ -85,6 +79,7 @@ function fillMoviePoster(movieName, id) {
         rig_cell.appendChild(rig_overlay);
         rig_cell.appendChild(rig_text);
         li.appendChild(rig_cell);
+        document.getElementById("rig").appendChild(li);
 
         var movieInfoText = "<b><h1>" + movieInfo["Title"] + "</h1></b>";
         movieInfoText += "<b>Year</b>: " + movieInfo["Year"] + "<br/>";
@@ -103,7 +98,7 @@ function fillMoviePoster(movieName, id) {
         var downloadButton = document.createElement("input");
 
         deleteButton.setAttribute("type", "image");
-        deleteButton.src = "delete.png";
+        deleteButton.src = path.join(__dirname, "img/delete.png");
         deleteButton.setAttribute("height", "50px");
         deleteButton.setAttribute("width", "50px");
         deleteButton.setAttribute("class", "delete_button");
@@ -112,7 +107,7 @@ function fillMoviePoster(movieName, id) {
         });
 
         downloadButton.setAttribute("type", "image");
-        downloadButton.src = "download.png";
+        downloadButton.src = path.join(__dirname, "img/download.png");
         downloadButton.setAttribute("height", "50px");
         downloadButton.setAttribute("width", "50px");
         downloadButton.setAttribute("class", "download_button");
@@ -124,19 +119,20 @@ function fillMoviePoster(movieName, id) {
         rig_overlay.appendChild(deleteButton);
 
         if (movieInfo["Poster"] != "N/A") {
-          var cachedImage = path.join(__dirname, movieName + '.jpg');
+          var cachedImage = path.join(__dirname, "cache/" + movieName + '.jpg');
 
           // download image if needed
           fs.stat(cachedImage, function(err, stat) {
             if(err != null) {
-              rig_img.src = movieInfo["Poster"];
+              rig_img.src = movieInfo['Poster'];
               electronImageResize({
                 url: movieInfo['Poster'],
                 width: 300,
                 height: 445
               }).then(img => {
-                // save it as a png file
-                fs.writeFileSync(cachedImage, img.toJpeg(100));
+                fs.writeFile(cachedImage, img.toJpeg(100), (err) => {
+                  if (err) throw err;
+                });
               })
             }
             else {
@@ -145,10 +141,8 @@ function fillMoviePoster(movieName, id) {
           });
         }
         else {
-          rig_img.src = "NA.jpg";
+          rig_img.src = path.join(__dirname, "img/NA.jpg");
         }
-
-        document.getElementById("rig").appendChild(li);
 
         // After all info is ready, present table
         if (id == moviesList.length - 1) {
