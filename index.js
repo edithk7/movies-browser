@@ -29,7 +29,7 @@ function loadMovies() {
       catch(err) {
         fs.writeFileSync(deletedMoviesFile, "");
       }
-      
+
       var deletedMovies = fs.readFileSync(deletedMoviesFile);
       for (i = 0; i < $titles.length; i++) {
         if (i == 0) continue;
