@@ -13,7 +13,7 @@ var movieYear = 0;
 var deletedMoviesFile = path.join(__dirname, "cache/deletedMovies.txt");
 
 // if on linux, hide title bar
-if (remote.platform == "linux") {
+if (remote.process.platform == "linux") {
   $("#title-bar").remove();
 }
 
