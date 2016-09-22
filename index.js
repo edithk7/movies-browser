@@ -7,6 +7,9 @@ var BrowserWindow = remote.BrowserWindow;
 
 var moviesList = [];
 var magnetLinks = {};
+var moviesYears = {};
+var moviesIds = {};
+var movieYear = 0;
 var deletedMoviesFile = path.join(__dirname, "deletedMovies.txt");
 
 loadMovies();
@@ -14,6 +17,8 @@ loadMovies();
 function loadMovies() {
   moviesList = [];
   magnetLinks = {};
+  moviesYears = {};
+  moviesIds = {};
   $("#rig").remove();
 
   var xhttp = new XMLHttpRequest();
@@ -39,6 +44,12 @@ function loadMovies() {
         if (!moviesList.includes($movieName)) {
           moviesList.push($movieName);
           magnetLinks[$movieName] = $links[i].textContent;
+          if (movieYear > 1900 && movieYear <= new Date().getFullYear()) {
+            moviesYears[$movieName] = movieYear;
+          }
+          else {
+            moviesYears[$movieName] = "";
+          }
         }
       }
       populateMoviesTable();
@@ -53,12 +64,18 @@ function fillMoviePoster(movieName, id) {
   jsonhttp.onreadystatechange = function() {
     if (this.readyState == this.DONE) {
       if (this.status == 200) {
+        var movieInfo = $.parseJSON(jsonhttp.response);
+
+        if (movieInfo["Response"] == "False") return;
+
         var li = document.createElement("li");
         var rig_cell = document.createElement("div");
         var rig_img = document.createElement('img');
         var rig_overlay = document.createElement("span");
         var rig_text = document.createElement("span");
 
+        moviesIds[movieName] = movieInfo["imdbID"];
+        li.setAttribute("id", movieInfo["imdbID"]);
         rig_cell.setAttribute("class", "rig-cell");
         rig_img.setAttribute("class", "rig-img");
         rig_overlay.setAttribute("class", "rig-overlay");
@@ -68,8 +85,6 @@ function fillMoviePoster(movieName, id) {
         rig_cell.appendChild(rig_overlay);
         rig_cell.appendChild(rig_text);
         li.appendChild(rig_cell);
-
-        var movieInfo = $.parseJSON(jsonhttp.response);
 
         var movieInfoText = "<b><h1>" + movieInfo["Title"] + "</h1></b>";
         movieInfoText += "<b>Year</b>: " + movieInfo["Year"] + "<br/>";
@@ -147,17 +162,19 @@ function fillMoviePoster(movieName, id) {
     }
   }
   var movieSearchString = movieName.replace(/\s/g, '+');
-  movieSearchString = "http://www.omdbapi.com/?t="+movieSearchString+"&y=&plot=short&r=json";
+  movieSearchString = "http://www.omdbapi.com/?t="+movieSearchString+"&y="+moviesYears[movieName]+"&plot=short&r=json";
   jsonhttp.open("GET", movieSearchString, true);
   jsonhttp.send();
 }
 
 function getMovieName(movieString) {
+  movieYear = 0;
   movieString = movieString.replace(/\./g, ' ');
   movieString = movieString.replace(/:/g, '');
   var re = /\d{4}/;
   var match = re.exec(movieString);
   if (match != null) {
+    movieYear = match[0];
     var yearIndex = movieString.indexOf(match[0]);
     return movieString.substring(0, yearIndex-1).trim();
   }
@@ -177,9 +194,7 @@ function populateMoviesTable() {
 
 function deleteMovie(movieName) {
   fs.appendFile(deletedMoviesFile, movieName + "\n");
-  $("#loading-img").fadeIn();
-  $("#rig").fadeOut();
-  setTimeout(function() { loadMovies(); }, 750);
+  $("#"+moviesIds[movieName]).hide('slow', function(){ $("#"+moviesIds[movieName]).remove(); });
 }
 
 function downloadMovie(movieName) {
