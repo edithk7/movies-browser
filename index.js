@@ -1,11 +1,13 @@
 var fs = require('fs');
 var open = require('open');
+var path = require('path');
 var remote = require('electron').remote;
 const electronImageResize = require('electron-image-resize');
 var BrowserWindow = remote.BrowserWindow;
 
 var moviesList = [];
 var magnetLinks = {};
+var deletedMoviesFile = path.join(__dirname, "deletedMovies.txt");
 
 loadMovies();
 
@@ -22,7 +24,7 @@ function loadMovies() {
       $titles = $xml.find("title");
       $links = $xml.find("link");
 
-      var deletedMovies = fs.readFileSync("deletedMovies.txt");
+      var deletedMovies = fs.readFileSync(deletedMoviesFile);
       for (i = 0; i < $titles.length; i++) {
         if (i == 0) continue;
         $movieName = $titles[i].textContent.toLowerCase();
@@ -107,7 +109,7 @@ function fillMoviePoster(movieName, id) {
         rig_overlay.appendChild(deleteButton);
 
         if (movieInfo["Poster"] != "N/A") {
-          var cachedImage = movieName + '.jpg';
+          var cachedImage = path.join(__dirname, movieName + '.jpg');
 
           // download image if needed
           fs.stat(cachedImage, function(err, stat) {
@@ -119,7 +121,7 @@ function fillMoviePoster(movieName, id) {
                 height: 445
               }).then(img => {
                 // save it as a png file
-                fs.writeFileSync(movieName+'.jpg', img.toJpeg(100));
+                fs.writeFileSync(cachedImage, img.toJpeg(100));
               })
             }
             else {
@@ -174,7 +176,7 @@ function populateMoviesTable() {
 }
 
 function deleteMovie(movieName) {
-  fs.appendFile('deletedMovies.txt', movieName + "\n");
+  fs.appendFile(deletedMoviesFile, movieName + "\n");
   $("#loading-img").fadeIn();
   $("#rig").fadeOut();
   setTimeout(function() { loadMovies(); }, 750);
