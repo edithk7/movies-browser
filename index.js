@@ -128,73 +128,77 @@ function fillMoviePoster(movieName, id) {
           rig_text.style.fontSize = "14px";
         }
 
-        rig_text.innerHTML = movieInfoText;
+        rig_text.innerHTML = movieInfoText;        
+        rig_text.addEventListener('click', function() {
+        openImdb(movieInfo["imdbID"]);
+      });
 
-        var deleteButton = document.createElement("input");
-        var downloadButton = document.createElement("input");
 
-        deleteButton.setAttribute("type", "image");
-        deleteButton.src = path.join(__dirname, "img/delete.png");
-        deleteButton.setAttribute("height", "50px");
-        deleteButton.setAttribute("width", "50px");
-        deleteButton.setAttribute("class", "delete_button");
-        deleteButton.addEventListener('click', function() {
-          deleteMovie(movieName);
+      var deleteButton = document.createElement("input");
+      var downloadButton = document.createElement("input");
+
+      deleteButton.setAttribute("type", "image");
+      deleteButton.src = path.join(__dirname, "img/delete.png");
+      deleteButton.setAttribute("height", "50px");
+      deleteButton.setAttribute("width", "50px");
+      deleteButton.setAttribute("class", "delete_button");
+      deleteButton.addEventListener('click', function() {
+        deleteMovie(movieName);
+      });
+
+      downloadButton.setAttribute("type", "image");
+      downloadButton.src = path.join(__dirname, "img/download.png");
+      downloadButton.setAttribute("height", "50px");
+      downloadButton.setAttribute("width", "50px");
+      downloadButton.setAttribute("class", "download_button");
+      downloadButton.addEventListener('click', function() {
+        downloadMovie(movieName);
+      });
+
+      rig_overlay.appendChild(downloadButton);
+      rig_overlay.appendChild(deleteButton);
+
+      if (movieInfo["Poster"] != "N/A") {
+        var cachedImage = path.join(__dirname, "cache/" + movieName + '.jpg');
+
+        // download image if needed
+        fs.stat(cachedImage, function(err, stat) {
+          if(err != null) {
+            rig_img.src = movieInfo['Poster'];
+            electronImageResize({
+              url: movieInfo['Poster'],
+              width: 300,
+              height: 445
+            }).then(img => {
+              fs.writeFile(cachedImage, img.toJpeg(100), (err) => {
+                if (err) throw err;
+              });
+            })
+          }
+          else {
+            rig_img.src = cachedImage;
+          }
         });
-
-        downloadButton.setAttribute("type", "image");
-        downloadButton.src = path.join(__dirname, "img/download.png");
-        downloadButton.setAttribute("height", "50px");
-        downloadButton.setAttribute("width", "50px");
-        downloadButton.setAttribute("class", "download_button");
-        downloadButton.addEventListener('click', function() {
-          downloadMovie(movieName);
-        });
-
-        rig_overlay.appendChild(downloadButton);
-        rig_overlay.appendChild(deleteButton);
-
-        if (movieInfo["Poster"] != "N/A") {
-          var cachedImage = path.join(__dirname, "cache/" + movieName + '.jpg');
-
-          // download image if needed
-          fs.stat(cachedImage, function(err, stat) {
-            if(err != null) {
-              rig_img.src = movieInfo['Poster'];
-              electronImageResize({
-                url: movieInfo['Poster'],
-                width: 300,
-                height: 445
-              }).then(img => {
-                fs.writeFile(cachedImage, img.toJpeg(100), (err) => {
-                  if (err) throw err;
-                });
-              })
-            }
-            else {
-              rig_img.src = cachedImage;
-            }
-          });
-        }
-        else {
-          rig_img.src = path.join(__dirname, "img/NA.jpg");
-        }
-
-        // After all info is ready, present table
-        if (id == moviesList.length - 1) {
-          $("#loading-img").fadeOut(500);
-          $("#rig").fadeIn(1000);
-        }
       }
       else {
-        alert("error");
+        rig_img.src = path.join(__dirname, "img/NA.jpg");
+      }
+
+      // After all info is ready, present table
+      if (id == moviesList.length - 1) {
+        $("#loading-img").fadeOut(500);
+        $("#rig").fadeIn(1000);
       }
     }
+    else {
+      alert("error");
+    }
   }
-  var movieSearchString = movieName.replace(/\s/g, '+');
-  movieSearchString = "http://www.omdbapi.com/?t="+movieSearchString+"&y="+moviesYears[movieName]+"&plot=short&r=json";
-  jsonhttp.open("GET", movieSearchString, true);
-  jsonhttp.send();
+}
+var movieSearchString = movieName.replace(/\s/g, '+');
+movieSearchString = "http://www.omdbapi.com/?t="+movieSearchString+"&y="+moviesYears[movieName]+"&plot=short&r=json";
+jsonhttp.open("GET", movieSearchString, true);
+jsonhttp.send();
 }
 
 function getMovieName(movieString) {
@@ -232,33 +236,39 @@ function downloadMovie(movieName) {
   open(link);
 }
 
+function openImdb(id) {
+  open("http://www.imdb.com/title/"+id+"/");
+}
+
 // Bind delete/download/min/max/close buttons
-(function () {
-  function init() {
-    document.getElementById("min-btn").addEventListener("click", function (e) {
-      var window = BrowserWindow.getFocusedWindow();
-      window.minimize();
-    });
+if (remote.process.platform != "linux") {
+  (function () {
+    function init() {
+      document.getElementById("min-btn").addEventListener("click", function (e) {
+        var window = BrowserWindow.getFocusedWindow();
+        window.minimize();
+      });
 
-    document.getElementById("max-btn").addEventListener("click", function (e) {
-      var window = BrowserWindow.getFocusedWindow();
-      if (!window.isMaximized()) {
-        window.maximize();
-      } else {
-        window.unmaximize();
+      document.getElementById("max-btn").addEventListener("click", function (e) {
+        var window = BrowserWindow.getFocusedWindow();
+        if (!window.isMaximized()) {
+          window.maximize();
+        } else {
+          window.unmaximize();
+        }
+      });
+
+      document.getElementById("close-btn").addEventListener("click", function (e) {
+        var window = BrowserWindow.getFocusedWindow();
+        window.close();
+      });
+    };
+
+
+    document.onreadystatechange = function () {
+      if (document.readyState == "complete") {
+        init();
       }
-    });
-
-    document.getElementById("close-btn").addEventListener("click", function (e) {
-      var window = BrowserWindow.getFocusedWindow();
-      window.close();
-    });
-  };
-
-
-  document.onreadystatechange = function () {
-    if (document.readyState == "complete") {
-      init();
-    }
-  };
-})();
+    };
+  })();
+}

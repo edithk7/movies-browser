@@ -1,8 +1,3 @@
-ghostbusters
-x-men apocalypse
-teenage mutant ninja turtles out of the shadows
-jason bourne
-warcraft
 the jungle book
 the legend of tarzan
 captain america civil war
@@ -44,3 +39,8 @@ room
 neighbors 2 sorority rising
 guardians of the galaxy
 the dark knight
+ghostbusters
+x-men apocalypse
+teenage mutant ninja turtles out of the shadows
+jason bourne
+warcraft
