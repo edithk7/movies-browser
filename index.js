@@ -129,32 +129,32 @@ function fillMoviePoster(movieName, id) {
         rig_overlay.appendChild(downloadButton);
         rig_overlay.appendChild(deleteButton);
 
-        if (movieInfo["Poster"] != "N/A") {
-          var cachedImage = path.join(__dirname, "cache/" + movieName + '.jpg');
+        var cachedImage = path.join(__dirname, "cache/" + movieName + '.jpg');
 
-          // download image if needed
-          fs.stat(cachedImage, function(err, stat) {
-            if(err != null) {
+        // download image if needed
+        fs.stat(cachedImage, function(err, stat) {
+          if(err != null) {
+            if (movieInfo['Poster'] != "N/A") {
               rig_img.src = movieInfo['Poster'];
-              electronImageResize({
-                url: movieInfo['Poster'],
-                width: 300,
-                height: 445
-              }).then(img => {
-                fs.writeFile(cachedImage, img.toJpeg(100), (err) => {
-                  if (err) throw err;
-                });
-              })
             }
             else {
-              rig_img.src = cachedImage;
+              rig_img.src = path.join(__dirname, "img/NA.jpg");
             }
-          });
-        }
-        else {
-          rig_img.src = path.join(__dirname, "img/NA.jpg");
-        }
-
+            electronImageResize({
+              url: movieInfo['Poster'],
+              width: 300,
+              height: 445
+            }).then(img => {
+              fs.writeFile(cachedImage, img.toJpeg(100), (err) => {
+                if (err) throw err;
+              });
+            })
+          }
+          else {
+            rig_img.src = cachedImage;
+          }
+        });
+                                
         // After all info is ready, present table
         if (id == moviesList.length - 1) {
           $("#loading-img").fadeOut(500);
