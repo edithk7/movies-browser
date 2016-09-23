@@ -101,7 +101,7 @@ function fillMoviePoster(movieName, id) {
         movieInfoText += "<b>Plot</b>: " + movieInfo["Plot"];
 
         if (movieInfoText.length > 400) {
-          rig_text.style.fontSize = "14px";
+          rig_text.style.fontSize = "15px";
         }
 
         rig_text.innerHTML = movieInfoText;
@@ -109,14 +109,11 @@ function fillMoviePoster(movieName, id) {
           openImdb(movieInfo["imdbID"]);
         });
 
-
         var deleteButton = document.createElement("input");
         var downloadButton = document.createElement("input");
 
         deleteButton.setAttribute("type", "image");
         deleteButton.src = path.join(__dirname, "img/delete.png");
-        deleteButton.setAttribute("height", "50px");
-        deleteButton.setAttribute("width", "50px");
         deleteButton.setAttribute("class", "delete_button");
         deleteButton.addEventListener('click', function() {
           deleteMovie(movieName);
@@ -124,8 +121,6 @@ function fillMoviePoster(movieName, id) {
 
         downloadButton.setAttribute("type", "image");
         downloadButton.src = path.join(__dirname, "img/download.png");
-        downloadButton.setAttribute("height", "50px");
-        downloadButton.setAttribute("width", "50px");
         downloadButton.setAttribute("class", "download_button");
         downloadButton.addEventListener('click', function() {
           downloadMovie(movieName);
@@ -217,32 +212,34 @@ function openImdb(id) {
 }
 
 // Bind delete/download/min/max/close buttons
-(function () {
-  function init() {
-    document.getElementById("min-btn").addEventListener("click", function (e) {
-      var window = BrowserWindow.getFocusedWindow();
-      window.minimize();
-    });
+if (remote.process.platform != "linux") {
+  (function () {
+    function init() {
+      document.getElementById("min-btn").addEventListener("click", function (e) {
+        var window = BrowserWindow.getFocusedWindow();
+        window.minimize();
+      });
 
-    document.getElementById("max-btn").addEventListener("click", function (e) {
-      var window = BrowserWindow.getFocusedWindow();
-      if (!window.isMaximized()) {
-        window.maximize();
-      } else {
-        window.unmaximize();
+      document.getElementById("max-btn").addEventListener("click", function (e) {
+        var window = BrowserWindow.getFocusedWindow();
+        if (!window.isMaximized()) {
+          window.maximize();
+        } else {
+          window.unmaximize();
+        }
+      });
+
+      document.getElementById("close-btn").addEventListener("click", function (e) {
+        var window = BrowserWindow.getFocusedWindow();
+        window.close();
+      });
+    };
+
+
+    document.onreadystatechange = function () {
+      if (document.readyState == "complete") {
+        init();
       }
-    });
-
-    document.getElementById("close-btn").addEventListener("click", function (e) {
-      var window = BrowserWindow.getFocusedWindow();
-      window.close();
-    });
-  };
-
-
-  document.onreadystatechange = function () {
-    if (document.readyState == "complete") {
-      init();
-    }
-  };
-})();
+    };
+  })();
+}

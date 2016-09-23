@@ -1,4 +1,4 @@
 # movies-browser
 Electron movies browser
 
-![alt tag](http://i.imgur.com/IIuCxCr.png "Screenshot")
+![alt tag](http://imgur.com/phpDefb.png "Screenshot")
