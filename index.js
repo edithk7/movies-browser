@@ -25,43 +25,50 @@ loadMovies();
 function loadMovies() {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
-    if (this.readyState == this.DONE && this.status == 200) {
-      var doc = $.parseXML(xhttp.response);
-      $xml = $(doc);
-      $titles = $xml.find("title");
-      $links = $xml.find("link");
+    if (this.readyState == this.DONE) {
+      if (this.status == 200) {
+        var doc = $.parseXML(xhttp.response);
+        $xml = $(doc);
+        $titles = $xml.find("title");
+        $links = $xml.find("link");
 
-      try {
-        fs.statSync(deletedMoviesFile);
-      }
-      catch(err) {
-        fs.writeFileSync(deletedMoviesFile, "");
-      }
+        try {
+          fs.statSync(deletedMoviesFile);
+        }
+        catch(err) {
+          fs.writeFileSync(deletedMoviesFile, "");
+        }
 
-      var deletedMovies = fs.readFileSync(deletedMoviesFile);
-      for (i = 0; i < $titles.length; i++) {
-        if (i == 0) continue;
-        $movieName = $titles[i].textContent.toLowerCase();
-        $movieName = getMovieName($movieName);
+        var deletedMovies = fs.readFileSync(deletedMoviesFile);
+        for (i = 0; i < $titles.length; i++) {
+          if (i == 0) continue;
+          $movieName = $titles[i].textContent.toLowerCase();
+          $movieName = getMovieName($movieName);
 
-        // skip french movies
-        if ($movieName.includes("french")) continue; // continue in jquery
+          // skip french movies
+          if ($movieName.includes("french")) continue; // continue in jquery
 
-        // skip deleted movies
-        if (deletedMovies.indexOf($movieName) != -1) continue;
+          // skip deleted movies
+          if (deletedMovies.indexOf($movieName) != -1) continue;
 
-        if (!moviesList.includes($movieName)) {
-          moviesList.push($movieName);
-          magnetLinks[$movieName] = $links[i].textContent;
-          if (movieYear > 1900 && movieYear <= new Date().getFullYear()) {
-            moviesYears[$movieName] = movieYear;
-          }
-          else {
-            moviesYears[$movieName] = "";
+          if (!moviesList.includes($movieName)) {
+            moviesList.push($movieName);
+            magnetLinks[$movieName] = $links[i].textContent;
+            if (movieYear > 1900 && movieYear <= new Date().getFullYear()) {
+              moviesYears[$movieName] = movieYear;
+            }
+            else {
+              moviesYears[$movieName] = "";
+            }
           }
         }
+        populateMoviesTable();
       }
-      populateMoviesTable();
+      else {
+        alert("can't contact the pirate bay :(");
+        var window = BrowserWindow.getFocusedWindow();
+        window.close();
+      }
     }
   };
   xhttp.open("GET", "https://thepiratebay.org/rss/top100/207", true);
