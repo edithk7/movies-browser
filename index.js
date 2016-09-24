@@ -16,6 +16,9 @@ var deletedMoviesFile = path.join(__dirname, "cache/deletedMovies.txt");
 if (remote.process.platform == "linux") {
   $("#title-bar").remove();
 }
+else {
+  document.getElementById("main-section").style.height = "96vh";
+}
 
 loadMovies();
 
@@ -154,7 +157,7 @@ function fillMoviePoster(movieName, id) {
             rig_img.src = cachedImage;
           }
         });
-                                
+
         // After all info is ready, present table
         if (id == moviesList.length - 1) {
           $("#loading-img").fadeOut(500);
