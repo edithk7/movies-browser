@@ -20,9 +20,10 @@ else {
   document.getElementById("main-section").style.height = "96vh";
 }
 
-loadMovies();
+loadMovies("HD");
+loadMovies("normal");
 
-function loadMovies() {
+function loadMovies(moviesQuality) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == this.DONE) {
@@ -43,10 +44,19 @@ function loadMovies() {
         for (i = 0; i < $titles.length; i++) {
           if (i == 0) continue;
           $movieName = $titles[i].textContent.toLowerCase();
+
+          // filter low quality movies
+          if (moviesQuality == "normal") {
+              if (!($movieName.includes("brrip") || $movieName.includes("hdrip") || $movieName.includes("dvdrip") || $movieName.includes("bdrip") || $movieName.includes("webrip") || $movieName.includes("blueray")))
+              {
+                continue;
+              }
+          }
+
           $movieName = getMovieName($movieName);
 
           // skip french movies
-          if ($movieName.includes("french")) continue; // continue in jquery
+          if ($movieName.includes("french")) continue;
 
           // skip deleted movies
           if (deletedMovies.indexOf($movieName) != -1) continue;
@@ -62,7 +72,9 @@ function loadMovies() {
             }
           }
         }
-        populateMoviesTable();
+        if (moviesQuality == "normal") {
+            populateMoviesTable();
+        }
       }
       else {
         alert("can't contact the pirate bay :(");
@@ -71,7 +83,12 @@ function loadMovies() {
       }
     }
   };
-  xhttp.open("GET", "https://thepiratebay.org/rss/top100/207", true);
+  if (moviesQuality == "HD") {
+      xhttp.open("GET", "https://thepiratebay.org/rss/top100/207", true);
+  }
+  else if (moviesQuality == "normal") {
+    xhttp.open("GET", "https://thepiratebay.org/rss/top100/201", true);
+  }
   xhttp.send();
 }
 
@@ -82,7 +99,14 @@ function fillMoviePoster(movieName, id) {
       if (this.status == 200) {
         var movieInfo = $.parseJSON(jsonhttp.response);
 
-        if (movieInfo["Response"] == "False") return;
+        if (movieInfo["Response"] == "False") {
+          console.log("***can't find movie " + movieName + "***");
+          if (id == moviesList.length - 1) {
+            $("#loading-img").fadeOut(500);
+            $("#rig").fadeIn(1000);
+          }
+          return;
+        }
 
         var li = document.createElement("li");
         var rig_cell = document.createElement("div");
@@ -186,6 +210,10 @@ function getMovieName(movieString) {
   movieYear = 0;
   movieString = movieString.replace(/\./g, ' ');
   movieString = movieString.replace(/:/g, '');
+  movieString = movieString.replace(/&/g, 'and');
+  movieString = movieString.replace(/;/g, '');
+  movieString = movieString.replace(/\//g, '');
+  movieString = movieString.replace(/!/g, '');
   var re = /\d{4}/;
   var match = re.exec(movieString);
   if (match != null) {
