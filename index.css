@@ -158,11 +158,9 @@ body {
   bottom: 0;
   left:0;
   right: 0;
-  /*
   width: 80%;
   height: 80%;
-  */
-  background: white;
+  background: rgba(0, 0, 0, .5);
   display: none;
   overflow: auto;
 }
@@ -171,14 +169,25 @@ body {
   height: 25px;
   width: 25px;
   position: fixed;
-  top: 10px;
-  right: 20px;
+  right: 12%;
+  top: 11%;
 }
 
 #reviews {
   padding-left: 10px;
   padding-top: 20px;
-  text-align: left;  
+  text-align: left;
+  font-size: 22px;
+  background: rgba(0, 0, 0, .5);
+}
+
+.yn, a {
+  display: none;
+}
+
+hr {
+  width: 99% !important;
+  background-color: white;
 }
 
 @media (max-width: 2000px) {
@@ -214,6 +223,7 @@ body {
 ::-webkit-scrollbar {
   height: 14px;
   width: 14px;
+  background-color: #333333;
 }
 
 ::-webkit-scrollbar-thumb {

@@ -233,6 +233,7 @@ function getMovieReviews(movieId) {
         reviewsPageText = stripMovieReviewsGarbage(reviewsPageText);
         document.getElementById("reviews").innerHTML = reviewsPageText;
         $("#reviews-overlay").fadeIn();
+        document.getElementById("reviews-overlay").scrollTop = 0;
       }
       else {
         alert("can't contact imdb :(");
@@ -244,15 +245,11 @@ function getMovieReviews(movieId) {
 }
 
 function stripMovieReviewsGarbage(reviewsPageText) {
-  var header = "<html><head></head><body>";
-  var footer = "</body></html>";
-
   var mark = "</td><\/tr><\/table>\n\n<hr size=\"1\" noshade=\"1\">";
   var start = reviewsPageText.indexOf(mark) + mark.length;
   var reviewsPageTextSliced = reviewsPageText.slice(start, reviewsPageText.length);
-  var end = reviewsPageTextSliced.indexOf("<hr size=\"1\" noshade=\"1\">");
-  console.log(header + reviewsPageTextSliced.slice(0, end) + footer);
-  return header + reviewsPageTextSliced.slice(0, end) + footer;
+  var end = reviewsPageTextSliced.indexOf("<hr noshade=\"1\" size=\"1\" width=\"50%\" align=\"center\">\n\n<hr size=\"1\" noshade=\"1\">");
+  return reviewsPageTextSliced.slice(0, end);
 }
 
 // Bind delete/download/min/max/close buttons
