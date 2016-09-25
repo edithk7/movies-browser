@@ -103,7 +103,7 @@ function fillMoviePoster(movieName, id) {
         li.appendChild(rig_cell);
         document.getElementById("rig").appendChild(li);
 
-        var movieInfoText = "<b><h1>" + movieInfo["Title"] + "</h1></b>";
+        var movieInfoText = "<b>" + movieInfo["Title"] + "</b><br/><br/>";
         movieInfoText += "<b>Year</b>: " + movieInfo["Year"] + "<br/>";
         movieInfoText += "<b>Genre</b>: " + movieInfo["Genre"] + "<br/>";
         movieInfoText += "<b>Actors</b>: " + movieInfo["Actors"] + "<br/>";
@@ -116,7 +116,7 @@ function fillMoviePoster(movieName, id) {
 
         rig_text.innerHTML = movieInfoText;
         rig_text.addEventListener('click', function() {
-          openImdb(movieInfo["imdbID"]);
+          getMovieReviews(movieInfo["imdbID"]);
         });
 
         var deleteButton = document.createElement("input");
@@ -219,6 +219,40 @@ function downloadMovie(movieName) {
 
 function openImdb(id) {
   open("http://www.imdb.com/title/"+id+"/");
+}
+
+document.getElementById("reviews-overlay-close").addEventListener('click', function() {
+  $("#reviews-overlay").fadeOut();
+});
+function getMovieReviews(movieId) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == this.DONE) {
+      if (this.status == 200) {
+        var reviewsPageText = xhttp.responseText;
+        reviewsPageText = stripMovieReviewsGarbage(reviewsPageText);
+        document.getElementById("reviews").innerHTML = reviewsPageText;
+        $("#reviews-overlay").fadeIn();
+      }
+      else {
+        alert("can't contact imdb :(");
+      }
+    }
+  };
+  xhttp.open("GET", "http://www.imdb.com/title/"+movieId+"/reviews", true);
+  xhttp.send();
+}
+
+function stripMovieReviewsGarbage(reviewsPageText) {
+  var header = "<html><head></head><body>";
+  var footer = "</body></html>";
+
+  var mark = "</td><\/tr><\/table>\n\n<hr size=\"1\" noshade=\"1\">";
+  var start = reviewsPageText.indexOf(mark) + mark.length;
+  var reviewsPageTextSliced = reviewsPageText.slice(start, reviewsPageText.length);
+  var end = reviewsPageTextSliced.indexOf("<hr size=\"1\" noshade=\"1\">");
+  console.log(header + reviewsPageTextSliced.slice(0, end) + footer);
+  return header + reviewsPageTextSliced.slice(0, end) + footer;
 }
 
 // Bind delete/download/min/max/close buttons
