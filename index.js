@@ -11,6 +11,7 @@ var moviesYears = {};
 var moviesIds = {};
 var movieYear = 0;
 var deletedMoviesFile = path.join(__dirname, "cache/deletedMovies.txt");
+var firstMovieLoaded = false;
 
 // if on linux, hide title bar
 if (remote.process.platform == "linux") {
@@ -101,10 +102,6 @@ function fillMoviePoster(movieName, id) {
 
         if (movieInfo["Response"] == "False") {
           console.log("***can't find movie " + movieName + "***");
-          if (id == moviesList.length - 1) {
-            $("#loading-img").fadeOut(500);
-            $("#rig").fadeIn(1000);
-          }
           return;
         }
 
@@ -116,6 +113,7 @@ function fillMoviePoster(movieName, id) {
 
         moviesIds[movieName] = movieInfo["imdbID"];
         li.setAttribute("id", movieInfo["imdbID"]);
+        li.style.display = "none";
         rig_cell.setAttribute("class", "rig-cell");
         rig_img.setAttribute("class", "rig-img");
         rig_overlay.setAttribute("class", "rig-overlay");
@@ -189,14 +187,14 @@ function fillMoviePoster(movieName, id) {
           }
         });
 
-        // After all info is ready, present table
-        if (id == moviesList.length - 1) {
-          $("#loading-img").fadeOut(500);
-          $("#rig").fadeIn(1000);
+        if (!firstMovieLoaded) {
+          firstMovieLoaded = true;
+          $("#loading-img").fadeOut();
         }
+        $("#"+movieInfo["imdbID"]).fadeIn(2000);
       }
       else {
-        alert("error");
+        alert("error: status for " + movieName + " is " + this.status);
       }
     }
   }
