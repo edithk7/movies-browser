@@ -28,6 +28,7 @@ function loadMovies(moviesQuality) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     console.log("PB state: " + this.readyState);
+    document.getElementById("loading-info-" + moviesQuality.toLowerCase()).innerHTML = "Getting " + moviesQuality + " movies: " + this.readyState + "/4";
     if (this.readyState == this.DONE) {
       if (this.status == 200) {
         var doc = $.parseXML(xhttp.response);
@@ -192,6 +193,7 @@ function fillMoviePoster(movieName, id) {
         if (!firstMovieLoaded) {
           firstMovieLoaded = true;
           $("#loading-img").fadeOut();
+          $(".loading-info").fadeOut(200);
         }
         $("#"+movieInfo["imdbID"]).fadeIn(2000);
       }
