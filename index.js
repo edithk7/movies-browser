@@ -27,6 +27,7 @@ loadMovies("normal");
 function loadMovies(moviesQuality) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
+    console.log("PB state: " + this.readyState);
     if (this.readyState == this.DONE) {
       if (this.status == 200) {
         var doc = $.parseXML(xhttp.response);
@@ -96,6 +97,7 @@ function loadMovies(moviesQuality) {
 function fillMoviePoster(movieName, id) {
   var jsonhttp = new XMLHttpRequest();
   jsonhttp.onreadystatechange = function() {
+    console.log(id + "/" + (moviesList.length - 1) + "(" + movieName + ") state: " + this.readyState);
     if (this.readyState == this.DONE) {
       if (this.status == 200) {
         var movieInfo = $.parseJSON(jsonhttp.response);
@@ -271,6 +273,12 @@ function getMovieReviews(movieId) {
 }
 
 function stripMovieReviewsGarbage(reviewsPageText) {
+
+  // no reviews
+  if (reviewsPageText.indexOf("0 reviews in total") != -1) {
+    return "There are no reviews for this movie.";
+  }
+
   var mark = "</td><\/tr><\/table>\n\n<hr size=\"1\" noshade=\"1\">";
   var start = reviewsPageText.indexOf(mark) + mark.length;
   var reviewsPageTextSliced = reviewsPageText.slice(start, reviewsPageText.length);
