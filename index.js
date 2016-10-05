@@ -254,7 +254,7 @@ function getMovieReviews(movieId, movieName) {
         document.getElementById("reviews").innerHTML = reviewsPageText;
         $("#cover").fadeIn();
         $("#reviews-overlay").fadeIn();
-        document.getElementById("reviews-overlay").scrollTop = 0;
+        document.getElementById("reviews").scrollTop = 0;
       }
       else {
         alert("can't contact imdb :(");
