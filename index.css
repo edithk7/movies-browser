@@ -67,62 +67,71 @@ body {
 }
 
 #main-section {
-  height: 100vh;
+  height: 96vh;
   margin: 0 auto;
   overflow: auto;
 }
 
+#cover {
+  position: fixed;
+  background:rgba(0,0,0,0.8);
+  z-index:1;
+  width:100%;
+  height:100%;
+  display:none;
+}
+
 #rig {
-    width: 100%;
-    margin:0 auto;
-    padding:0;
-    font-size:0;
-    list-style:none;
+  width: 100%;
+  margin:0 auto;
+  padding:0;
+  font-size:0;
+  list-style:none;
 }
 
 #rig li {
-    display: inline-block;
-    width:25%;
-    vertical-align:middle;
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+  display: inline-block;
+  width:25%;
+  vertical-align:middle;
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
 .rig-cell {
-    display:block;
-    position: relative;
-    overflow:hidden;
+  display:block;
+  position: relative;
+  overflow:hidden;
 }
 
 .rig-img {
-    display:block;
-    width: 100%;
-    height: auto;
-    border:none;
-    transform:scale(1);
-    transition:all 1s;
+  display:block;
+  width: 100%;
+  height: auto;
+  border:none;
+  transform:scale(1);
+  transition:all 1s;
 }
 
 #rig li:hover .rig-img {
-    transform:scale(1.05);
+  transform:scale(1.05);
 }
 
 .rig-overlay {
-    position: absolute;
-    display:block;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    margin: auto;
-    background: rgba(0, 0, 0, .5);
-    opacity:0;
-    transition:all 0.6s;
+  position: absolute;
+  display:block;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  background: rgba(0, 0, 0, .8);
+  opacity:0;
+  transition:all 0.6s;
 }
 
 #rig li:hover .rig-overlay {
-    opacity:0.8;
+  opacity:0.8;
 }
 
 .rig-text {
@@ -147,8 +156,8 @@ body {
 }
 
 #rig li:hover .rig-text {
-    transform:translateY(0px);
-    opacity:0.9;
+  transform:translateY(0px);
+  opacity:0.9;
 }
 
 .delete_button {
@@ -177,26 +186,39 @@ body {
   right: 0;
   width: 80%;
   height: 80%;
-  background: black;
+  background: rgb(50, 50, 50);
   display: none;
-  overflow: auto;
-  box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 6px rgba(35, 173, 278, 1);
+  overflow: hidden;
+  z-index: 2;
 }
 
-#reviews-overlay-close {
-  height: 25px;
-  width: 25px;
+#reviews-title-bar {
+  height: 44px;
+  padding: none;
+  background: rgb(33, 33, 33);
+}
+
+#reviews-close-btn {
   position: fixed;
-  right: 12%;
+  right: 11%;
   top: 11%;
 }
 
+#reviews-title {
+  position: fixed;
+  left: 11%;
+  top: 11%;
+  font-size: 26px;
+}
+
 #reviews {
-  padding-left: 10px;
-  padding-top: 20px;
   text-align: left;
+  padding-left: 10px;
   font-size: 22px;
-  background: black;
+  background: rgb(50, 50, 50);
+  height: 75vh;
+  overflow: auto;
 }
 
 .yn, a {
@@ -209,33 +231,49 @@ hr {
 }
 
 @media (max-width: 2000px) {
-    #rig li {
-        width:20%;
-    }
+  #rig li {
+    width:20%;
+  }
 }
 
 @media (max-width: 1400px) {
-    #rig li {
-        width:25%;
-    }
+  #rig li {
+    width:25%;
+  }
+
+  #reviews-title {
+    font-size: 20px;
+  }
 }
 
 @media (max-width: 1100px) {
-    #rig li {
-        width:33%;
-    }
+  #rig li {
+    width:33%;
+  }
+
+  #reviews-title {
+    font-size: 20px;
+  }
 }
 
 @media (max-width: 800px) {
-    #rig li {
-        width:50%;
-    }
+  #rig li {
+    width:50%;
+  }
+
+  #reviews-title {
+    font-size: 16px;
+  }
 }
 
 @media (max-width: 500px) {
-    #rig li {
-        width:100%;
-    }
+  #rig li {
+    width:100%;
+  }
+
+  #reviews-title {
+    font-size: 14px;
+  }
 }
 
 ::-webkit-scrollbar {

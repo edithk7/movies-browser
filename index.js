@@ -13,14 +13,6 @@ var movieYear = 0;
 var deletedMoviesFile = path.join(__dirname, "cache/deletedMovies.txt");
 var firstMovieLoaded = false;
 
-// if on linux, hide title bar
-if (remote.process.platform == "linux") {
-  $("#title-bar").remove();
-}
-else {
-  document.getElementById("main-section").style.height = "96vh";
-}
-
 loadMovies("HD");
 loadMovies("normal");
 
@@ -141,7 +133,7 @@ function fillMoviePoster(movieName, id) {
 
         rig_text.innerHTML = movieInfoText;
         rig_text.addEventListener('click', function() {
-          getMovieReviews(movieInfo["imdbID"]);
+          getMovieReviews(movieInfo["imdbID"], movieInfo["Title"]);
         });
 
         var deleteButton = document.createElement("input");
@@ -251,17 +243,16 @@ function openImdb(id) {
   open("http://www.imdb.com/title/"+id+"/");
 }
 
-document.getElementById("reviews-overlay-close").addEventListener('click', function() {
-  $("#reviews-overlay").fadeOut();
-});
-function getMovieReviews(movieId) {
+function getMovieReviews(movieId, movieName) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == this.DONE) {
       if (this.status == 200) {
         var reviewsPageText = xhttp.responseText;
         reviewsPageText = stripMovieReviewsGarbage(reviewsPageText);
+        document.getElementById("reviews-title").innerText = movieName;
         document.getElementById("reviews").innerHTML = reviewsPageText;
+        $("#cover").fadeIn();
         $("#reviews-overlay").fadeIn();
         document.getElementById("reviews-overlay").scrollTop = 0;
       }
@@ -284,12 +275,18 @@ function stripMovieReviewsGarbage(reviewsPageText) {
   var mark = "</td><\/tr><\/table>\n\n<hr size=\"1\" noshade=\"1\">";
   var start = reviewsPageText.indexOf(mark) + mark.length;
   var reviewsPageTextSliced = reviewsPageText.slice(start, reviewsPageText.length);
-  var end = reviewsPageTextSliced.indexOf("<hr noshade=\"1\" size=\"1\" width=\"50%\" align=\"center\">\n\n<hr size=\"1\" noshade=\"1\">");
+
+  // only 1 reviews
+  if (reviewsPageText.indexOf("1 reviews in total") != -1) {
+    var end = reviewsPageTextSliced.indexOf("<hr noshade=\"1\" size=\"1\" align=\"center\">\n\n<hr size=\"1\" noshade=\"1\">");
+  }
+  else {
+    var end = reviewsPageTextSliced.indexOf("<hr noshade=\"1\" size=\"1\" width=\"50%\" align=\"center\">\n\n<hr size=\"1\" noshade=\"1\">");
+  }
   return reviewsPageTextSliced.slice(0, end);
 }
 
 // Bind delete/download/min/max/close buttons
-if (remote.process.platform != "linux") {
   (function () {
     function init() {
       document.getElementById("min-btn").addEventListener("click", function (e) {
@@ -312,6 +309,10 @@ if (remote.process.platform != "linux") {
       });
     };
 
+    document.getElementById("reviews-close-btn").addEventListener('click', function() {
+      $("#reviews-overlay").fadeOut();
+      $("#cover").fadeOut();
+    });
 
     document.onreadystatechange = function () {
       if (document.readyState == "complete") {
@@ -319,4 +320,3 @@ if (remote.process.platform != "linux") {
       }
     };
   })();
-}

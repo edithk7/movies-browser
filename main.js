@@ -22,7 +22,7 @@ function createWindow () {
   if (process.platform == "linux") {
     win = new BrowserWindow({
       width: windowWidth, height: windowHeight,
-      frame: true,
+      frame: false,
       backgroundColor: '#333333',
       darkTheme: true,
       x: 1360 + center_x, // need to make this portable...
