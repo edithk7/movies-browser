@@ -23,7 +23,7 @@ function createWindow () {
     win = new BrowserWindow({
       width: windowWidth, height: windowHeight,
       frame: false,
-      backgroundColor: '#333333',
+      backgroundColor: '#212121',
       darkTheme: true,
       x: 1360 + center_x, // need to make this portable...
       y: center_y
@@ -34,7 +34,7 @@ function createWindow () {
     win = new BrowserWindow({
       width: windowWidth, height: windowHeight,
       frame: false,
-      backgroundColor: '#333333',
+      backgroundColor: '#212121',
       x: center_x,
       y: center_y
     })

@@ -50,6 +50,9 @@ function loadMovies(moviesQuality) {
 
           $movieName = getMovieName($movieName);
 
+          // skip empty movies
+          if ($movieName == "") continue;
+
           // skip french movies
           if ($movieName.includes("french")) continue;
 
@@ -70,7 +73,7 @@ function loadMovies(moviesQuality) {
         if (moviesQuality == "normal") {
           if (moviesList.length == 0) {
             $("#progress-bar").fadeOut();
-            $("#no-movies-msg").fadeIn();
+            $("#no-movies-container").fadeIn();
           }
           else {
             populateMoviesTable();
@@ -262,6 +265,10 @@ function getMovieReviews(movieId, movieName) {
         var reviewsPageText = xhttp.responseText;
         reviewsPageText = stripMovieReviewsGarbage(reviewsPageText);
         document.getElementById("reviews-title").innerText = movieName;
+
+        if (reviewsPageText == "") {
+          $("#no-reviews-container").fadeIn();
+        }
         document.getElementById("reviews").innerHTML = reviewsPageText;
         $("#cover").fadeIn();
         $("#reviews-overlay").fadeIn();
@@ -280,7 +287,7 @@ function stripMovieReviewsGarbage(reviewsPageText) {
 
   // no reviews
   if (reviewsPageText.indexOf("0 reviews in total") != -1) {
-    return "There are no reviews for this movie.";
+    return "";
   }
 
   var mark = "</td><\/tr><\/table>\n\n<hr size=\"1\" noshade=\"1\">";
@@ -321,6 +328,7 @@ function stripMovieReviewsGarbage(reviewsPageText) {
   };
 
   document.getElementById("reviews-close-btn").addEventListener('click', function() {
+    $("#no-reviews-container").fadeOut();
     $("#reviews-overlay").fadeOut();
     $("#cover").fadeOut();
   });

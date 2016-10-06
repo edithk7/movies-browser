@@ -3,21 +3,27 @@ html {
 }
 
 body {
-  background-color: rgb(50, 50, 50);
+  background-color: rgb(33, 33, 33);
   color: rgb(195,195,195);
   padding: 0px;
   margin: 0px;
+}
+
+#no-movies-container {
+  position: fixed;
+  top: 40px; bottom: 0; left: 0; right: 0;
+  background-color: rgb(50, 50, 50);
+  display: none;
 }
 
 #no-movies-msg {
   position: fixed;
   margin: auto;
   height: 90px;
-  top: -10%; bottom: 0; left: 0; right: 0;
+  top: -30%; bottom: 0; left: 0; right: 0;
   line-height: 90px;
   text-align: center;
   font-size: 30px;
-  display: none;
 }
 
 progress {
@@ -57,7 +63,7 @@ progress::-webkit-progress-value {
 #title-bar {
   -webkit-app-region: drag;
   height: 30px;
-  background-color: rgb(50,50,50);
+  background-color: rgb(33,33,33);
   padding: none;
   margin: 5px;
 }
@@ -66,13 +72,14 @@ progress::-webkit-progress-value {
   top: 11px;
   left: 9px;
   position: fixed;
+  font-size: 18px;
 }
 
 #title-bar-btns {
   position: fixed;
   right: 7px;
   top: 7px;
-  background-color: rgb(50,50,50);
+  background-color: rgb(33,33,33);
   -webkit-app-region: no-drag;
 }
 
@@ -88,9 +95,10 @@ progress::-webkit-progress-value {
 }
 
 #main-section {
-  height: 96vh;
+  height: 95.7vh;
   margin: 0 auto;
   overflow: auto;
+  background-color: rgb(33, 33, 33);
 }
 
 #cover {
@@ -230,7 +238,7 @@ progress::-webkit-progress-value {
   position: fixed;
   left: 11%;
   top: 11%;
-  font-size: 26px;
+  font-size: 24px;
 }
 
 #reviews {
@@ -238,8 +246,22 @@ progress::-webkit-progress-value {
   padding-left: 10px;
   font-size: 22px;
   background: rgb(50, 50, 50);
-  height: 75vh;
+  height: 76vh;
   overflow: auto;
+}
+
+#no-reviews-container {
+  display: none;
+}
+
+#no-reviews-msg {
+  height: 90px;
+  line-height: 90px;
+  position: fixed;
+  top: -20%; bottom: 0; left: 0; right: 0;
+  margin: auto;
+  text-align: center;
+  font-size: 30px;
 }
 
 .yn, a {
