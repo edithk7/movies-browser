@@ -63,22 +63,31 @@ progress::-webkit-progress-value {
 #title-bar {
   -webkit-app-region: drag;
   height: 30px;
-  background-color: rgb(33,33,33);
+  background-color: rgb(40,40,40);
   padding: none;
-  margin: 5px;
+  margin: 10px;
+  box-shadow: 5px 5px 5px 0px rgba(0,0,0,1);
+}
+
+#title {
+  position: fixed;
+  left: 16px;
+  top: 12px;
+  padding-top: 2px;
+  font-size: 20px;
 }
 
 #title-bar-btns {
   position: fixed;
-  right: 7px;
-  top: 7px;
-  background-color: rgb(33,33,33);
+  right: 12px;
+  top: 12px;
+  background-color: rgb(40,40,40);
   -webkit-app-region: no-drag;
 }
 
 .button {
   background-color:rgb(40,40,40);
-  border: 1px solid rgb(33,33,33);
+  border: 1px solid rgb(21,21,21);
   color: white;
   padding: 3px 14px;
   text-align: center;
@@ -89,7 +98,7 @@ progress::-webkit-progress-value {
 
 #main-section {
   height: 95.7vh;
-  margin: 0 auto;
+  margin: 20px auto;
   overflow: auto;
   background-color: rgb(33, 33, 33);
 }
@@ -117,7 +126,7 @@ progress::-webkit-progress-value {
   width:25%;
   vertical-align:middle;
   box-sizing:border-box;
-  margin:30px;
+  margin: 0px 30px 60px 30px;
   padding:0;
   box-shadow: 10px 10px 5px 0px rgba(0,0,0,1);
 }

@@ -10,6 +10,7 @@ var magnetLinks = {};
 var moviesYears = {};
 var moviesIds = {};
 var movieYear = 0;
+var displayedMovies = 0;
 var deletedMoviesFile = path.join(__dirname, "cache/deletedMovies.txt");
 var firstMovieLoaded = false;
 
@@ -202,6 +203,8 @@ function fillMoviePoster(movieName, id) {
           $("#progress-bar").fadeOut();
         }
         $("#"+movieInfo["imdbID"]).fadeIn(2000);
+        displayedMovies++;
+        document.getElementById("title").innerText = "Electron Movies Browser - displaying " + (displayedMovies-1) + " movies";
       }
       else {
         alert("error: status for " + movieName + " is " + this.status);
@@ -246,6 +249,8 @@ function populateMoviesTable() {
 function deleteMovie(movieName) {
   fs.appendFile(deletedMoviesFile, movieName + "\n");
   $("#"+moviesIds[movieName]).hide('slow', function(){ $("#"+moviesIds[movieName]).remove(); });
+  displayedMovies--;
+  document.getElementById("title").innerText = "Electron Movies Browser - displaying " + (displayedMovies-1) + " movies";
 }
 
 function downloadMovie(movieName) {
