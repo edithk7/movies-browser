@@ -1,1 +1,1 @@
-electron-packager . --version=1.4.1
+electron-packager . --version=1.4.2

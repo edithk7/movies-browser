@@ -20,7 +20,7 @@ function loadMovies(moviesQuality) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     console.log("PB state: " + this.readyState);
-    document.getElementById("loading-info-" + moviesQuality.toLowerCase()).innerHTML = "Getting " + moviesQuality + " movies: " + this.readyState + "/4";
+    progressBarDoStep();
     if (this.readyState == this.DONE) {
       if (this.status == 200) {
         var doc = $.parseXML(xhttp.response);
@@ -42,10 +42,10 @@ function loadMovies(moviesQuality) {
 
           // filter low quality movies
           if (moviesQuality == "normal") {
-              if (!($movieName.includes("brrip") || $movieName.includes("hdrip") || $movieName.includes("dvdrip") || $movieName.includes("bdrip") || $movieName.includes("webrip") || $movieName.includes("blueray")))
-              {
-                continue;
-              }
+            if (!($movieName.includes("brrip") || $movieName.includes("hdrip") || $movieName.includes("dvdrip") || $movieName.includes("bdrip") || $movieName.includes("webrip") || $movieName.includes("blueray")))
+            {
+              continue;
+            }
           }
 
           $movieName = getMovieName($movieName);
@@ -68,7 +68,7 @@ function loadMovies(moviesQuality) {
           }
         }
         if (moviesQuality == "normal") {
-            populateMoviesTable();
+          populateMoviesTable();
         }
       }
       else {
@@ -79,12 +79,17 @@ function loadMovies(moviesQuality) {
     }
   };
   if (moviesQuality == "HD") {
-      xhttp.open("GET", "https://thepiratebay.org/rss/top100/207", true);
+    xhttp.open("GET", "https://thepiratebay.org/rss/top100/207", true);
   }
   else if (moviesQuality == "normal") {
     xhttp.open("GET", "https://thepiratebay.org/rss/top100/201", true);
   }
   xhttp.send();
+}
+
+function progressBarDoStep() {
+  var pBar = document.getElementById('progress-bar');
+  pBar.value += 12.5;
 }
 
 function fillMoviePoster(movieName, id) {
@@ -184,8 +189,7 @@ function fillMoviePoster(movieName, id) {
 
         if (!firstMovieLoaded) {
           firstMovieLoaded = true;
-          $("#loading-img").fadeOut();
-          $(".loading-info").fadeOut(200);
+          $("#progress-bar").fadeOut();        
         }
         $("#"+movieInfo["imdbID"]).fadeIn(2000);
       }
@@ -287,36 +291,36 @@ function stripMovieReviewsGarbage(reviewsPageText) {
 }
 
 // Bind delete/download/min/max/close buttons
-  (function () {
-    function init() {
-      document.getElementById("min-btn").addEventListener("click", function (e) {
-        var window = BrowserWindow.getFocusedWindow();
-        window.minimize();
-      });
-
-      document.getElementById("max-btn").addEventListener("click", function (e) {
-        var window = BrowserWindow.getFocusedWindow();
-        if (!window.isMaximized()) {
-          window.maximize();
-        } else {
-          window.unmaximize();
-        }
-      });
-
-      document.getElementById("close-btn").addEventListener("click", function (e) {
-        var window = BrowserWindow.getFocusedWindow();
-        window.close();
-      });
-    };
-
-    document.getElementById("reviews-close-btn").addEventListener('click', function() {
-      $("#reviews-overlay").fadeOut();
-      $("#cover").fadeOut();
+(function () {
+  function init() {
+    document.getElementById("min-btn").addEventListener("click", function (e) {
+      var window = BrowserWindow.getFocusedWindow();
+      window.minimize();
     });
 
-    document.onreadystatechange = function () {
-      if (document.readyState == "complete") {
-        init();
+    document.getElementById("max-btn").addEventListener("click", function (e) {
+      var window = BrowserWindow.getFocusedWindow();
+      if (!window.isMaximized()) {
+        window.maximize();
+      } else {
+        window.unmaximize();
       }
-    };
-  })();
+    });
+
+    document.getElementById("close-btn").addEventListener("click", function (e) {
+      var window = BrowserWindow.getFocusedWindow();
+      window.close();
+    });
+  };
+
+  document.getElementById("reviews-close-btn").addEventListener('click', function() {
+    $("#reviews-overlay").fadeOut();
+    $("#cover").fadeOut();
+  });
+
+  document.onreadystatechange = function () {
+    if (document.readyState == "complete") {
+      init();
+    }
+  };
+})();
