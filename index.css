@@ -9,6 +9,17 @@ body {
   margin: 0px;
 }
 
+#no-movies-msg {
+  position: fixed;
+  margin: auto;
+  height: 90px;
+  top: -10%; bottom: 0; left: 0; right: 0;
+  line-height: 90px;
+  text-align: center;
+  font-size: 30px;
+  display: none;
+}
+
 progress {
   position: fixed;
 	width: 400px;

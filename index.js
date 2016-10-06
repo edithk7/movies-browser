@@ -68,7 +68,13 @@ function loadMovies(moviesQuality) {
           }
         }
         if (moviesQuality == "normal") {
-          populateMoviesTable();
+          if (moviesList.length == 0) {
+            $("#progress-bar").fadeOut();
+            $("#no-movies-msg").fadeIn();
+          }
+          else {
+            populateMoviesTable();
+          }
         }
       }
       else {
@@ -102,6 +108,7 @@ function fillMoviePoster(movieName, id) {
 
         if (movieInfo["Response"] == "False") {
           console.log("***can't find movie " + movieName + "***");
+          fs.appendFile(deletedMoviesFile, movieName + "\n");
           return;
         }
 
@@ -189,7 +196,7 @@ function fillMoviePoster(movieName, id) {
 
         if (!firstMovieLoaded) {
           firstMovieLoaded = true;
-          $("#progress-bar").fadeOut();        
+          $("#progress-bar").fadeOut();
         }
         $("#"+movieInfo["imdbID"]).fadeIn(2000);
       }
