@@ -142,8 +142,8 @@ function fillMoviePoster(movieName, id) {
         movieInfoText += "<b>Rating</b>: " + movieInfo["imdbRating"] + "<br/><br/>";
         movieInfoText += "<b>Plot</b>: " + movieInfo["Plot"];
 
-        if (movieInfoText.length > 400) {
-          rig_text.style.fontSize = "15px";
+        if (movieInfoText.length > 600) {
+          rig_text.style.fontSize = "16px";
         }
 
         rig_text.innerHTML = movieInfoText;

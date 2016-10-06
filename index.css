@@ -68,13 +68,6 @@ progress::-webkit-progress-value {
   margin: 5px;
 }
 
-#title {
-  top: 11px;
-  left: 9px;
-  position: fixed;
-  font-size: 18px;
-}
-
 #title-bar-btns {
   position: fixed;
   right: 7px;
@@ -103,7 +96,7 @@ progress::-webkit-progress-value {
 
 #cover {
   position: fixed;
-  background:rgba(0,0,0,0.8);
+  background:rgba(33,33,33,0.8);
   z-index:1;
   width:100%;
   height:100%;
@@ -116,6 +109,7 @@ progress::-webkit-progress-value {
   padding:0;
   font-size:0;
   list-style:none;
+  text-align: center;
 }
 
 #rig li {
@@ -123,8 +117,9 @@ progress::-webkit-progress-value {
   width:25%;
   vertical-align:middle;
   box-sizing:border-box;
-  margin:0;
+  margin:30px;
   padding:0;
+  box-shadow: 10px 10px 5px 0px rgba(0,0,0,1);
 }
 
 .rig-cell {
@@ -154,13 +149,13 @@ progress::-webkit-progress-value {
   bottom: 0;
   right: 0;
   margin: auto;
-  background: rgba(0, 0, 0, .8);
+  background: rgba(0, 0, 0, .95);
   opacity:0;
   transition:all 0.6s;
 }
 
 #rig li:hover .rig-overlay {
-  opacity:0.8;
+  opacity:0.95;
 }
 
 .rig-text {
@@ -173,9 +168,8 @@ progress::-webkit-progress-value {
   width:100%;
   text-align:left;
   text-transform:capitalize;
-  font-size:16px;
+  font-size:18px;
   font-weight:bold;
-  font-family: 'Oswald', sans-serif;
   font-weight:normal;
   color:white;
   opacity:0;
@@ -217,7 +211,7 @@ progress::-webkit-progress-value {
   height: 80%;
   background: rgb(40, 40, 40);
   display: none;
-  box-shadow: 0 0 6px rgba(35, 173, 278, 1);
+  box-shadow: 10px 10px 5px 0px rgba(0,0,0,1);
   overflow: hidden;
   z-index: 2;
 }
@@ -230,13 +224,13 @@ progress::-webkit-progress-value {
 
 #reviews-close-btn {
   position: fixed;
-  right: 11%;
+  right: 10.4%;
   top: 11%;
 }
 
 #reviews-title {
   position: fixed;
-  left: 11%;
+  left: 10.4%;
   top: 11%;
   font-size: 24px;
 }
