@@ -49,13 +49,17 @@ function loadMovies(moviesQuality) {
             }
           }
 
+          // skip french movies
+          if ($movieName.includes("french")) continue;
+
+          // skip hardcoded subtitles
+          if ($movieName.includes(".hc.")) continue;
+
+          // leave only pure movie name
           $movieName = getMovieName($movieName);
 
           // skip empty movies
           if ($movieName == "") continue;
-
-          // skip french movies
-          if ($movieName.includes("french")) continue;
 
           // skip deleted movies
           if (deletedMovies.indexOf($movieName) != -1) continue;
