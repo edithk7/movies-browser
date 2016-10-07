@@ -269,11 +269,18 @@ function getMovieReviews(movieId, movieName) {
       if (this.status == 200) {
         var reviewsPageText = xhttp.responseText;
         reviewsPageText = stripMovieReviewsGarbage(reviewsPageText);
-        document.getElementById("reviews-title").innerText = movieName;
+        document.getElementById("reviews-title").innerText = movieName + " - User Reviews";
 
         if (reviewsPageText == "") {
           $("#no-reviews-container").fadeIn();
         }
+
+        // put p inside div
+        reviewsPageText = reviewsPageText.replace(/<\/div>\n<p>/g, "<p>");
+        reviewsPageText = reviewsPageText.replace(/<\/p>\n\n<div/g, "</p>\n</div>\n\n<div");
+
+        console.log(reviewsPageText);
+
         document.getElementById("reviews").innerHTML = reviewsPageText;
         $("#cover").fadeIn();
         $("#reviews-overlay").fadeIn();

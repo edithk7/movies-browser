@@ -63,10 +63,10 @@ progress::-webkit-progress-value {
 #title-bar {
   -webkit-app-region: drag;
   height: 30px;
-  background-color: rgb(40,40,40);
+  background-color: rgb(33,33,33);
   padding: none;
   margin: 10px;
-  box-shadow: 5px 5px 5px 0px rgba(0,0,0,1);
+  box-shadow: 2px 2px 10px 0px rgba(0,0,0,1);
 }
 
 #title {
@@ -81,12 +81,12 @@ progress::-webkit-progress-value {
   position: fixed;
   right: 12px;
   top: 12px;
-  background-color: rgb(40,40,40);
+  background-color: rgb(33,33,33);
   -webkit-app-region: no-drag;
 }
 
 .button {
-  background-color:rgb(40,40,40);
+  background-color:rgb(33,33,33);
   border: 1px solid rgb(21,21,21);
   color: white;
   padding: 3px 14px;
@@ -226,31 +226,48 @@ progress::-webkit-progress-value {
 }
 
 #reviews-title-bar {
-  height: 44px;
+  height: 30px;
+  background-color: rgb(33,33,33);
   padding: none;
-  background: rgb(33, 33, 33);
+  margin: 10px;
+  box-shadow: 2px 2px 10px 0px rgba(0,0,0,1);
 }
 
 #reviews-close-btn {
   position: fixed;
-  right: 10.4%;
-  top: 11%;
+  right: 10.7%;
+  top: 11.3%;
 }
 
 #reviews-title {
   position: fixed;
-  left: 10.4%;
-  top: 11%;
-  font-size: 24px;
+  left: 11%;
+  top: 11.3%;
+  font-size: 22px;
 }
 
 #reviews {
   text-align: left;
   padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   font-size: 22px;
   background: rgb(40, 40, 40);
-  height: 76vh;
+  height: 73vh;
   overflow: auto;
+}
+
+#reviews::-webkit-scrollbar {
+  background-color: rgb(40,40,40);
+}
+
+#reviews div {
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,1);
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 #no-reviews-container {
@@ -272,8 +289,7 @@ progress::-webkit-progress-value {
 }
 
 hr {
-  width: 99% !important;
-  background-color: white;
+  opacity: 0;
 }
 
 @media (max-width: 2000px) {
@@ -324,13 +340,14 @@ hr {
 
 ::-webkit-scrollbar {
   height: 14px;
-  width: 14px;
+  width: 10px;
   background-color: #212121;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #383838;
+  background-color: rgb(33,33,33);
+  box-shadow: -2px 2px 10px 0px rgba(0,0,0,1);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #383838;
+  background-color: #333333;
 }
