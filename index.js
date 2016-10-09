@@ -14,10 +14,11 @@ var displayedMovies = 0;
 var deletedMoviesFile = path.join(__dirname, "cache/deletedMovies.txt");
 var firstMovieLoaded = false;
 
-loadMovies("HD");
-loadMovies("normal");
+loadMovies("HD", true);
+//loadMovies("normal");
+var stepSize = 25;
 
-function loadMovies(moviesQuality) {
+function loadMovies(moviesQuality, lastList) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     console.log("PB state: " + this.readyState);
@@ -76,7 +77,7 @@ function loadMovies(moviesQuality) {
             }
           }
         }
-        if (moviesQuality == "normal") {
+        if (lastList) {
           if (moviesList.length == 0) {
             $("#progress-bar").fadeOut();
             $("#no-movies-container").fadeIn();
@@ -104,7 +105,7 @@ function loadMovies(moviesQuality) {
 
 function progressBarDoStep() {
   var pBar = document.getElementById('progress-bar');
-  pBar.value += 12.5;
+  pBar.value += stepSize;
 }
 
 function fillMoviePoster(movieName, id) {
