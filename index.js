@@ -54,6 +54,7 @@ function loadMovies(moviesQuality) {
 
           // skip hardcoded subtitles
           if ($movieName.includes(".hc.")) continue;
+          if ($movieName.includes(" hc ")) continue;
 
           // leave only pure movie name
           $movieName = getMovieName($movieName);
