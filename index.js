@@ -14,9 +14,9 @@ var displayedMovies = 0;
 var deletedMoviesFile = path.join(__dirname, "cache/deletedMovies.txt");
 var firstMovieLoaded = false;
 
-loadMovies("HD", true);
-//loadMovies("normal");
-var stepSize = 25;
+loadMovies("HD", false);
+loadMovies("normal", true);
+var stepSize = 12.5;
 
 function loadMovies(moviesQuality, lastList) {
   var xhttp = new XMLHttpRequest();
