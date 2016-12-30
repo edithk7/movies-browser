@@ -7,6 +7,6 @@
     "open": "^0.0.5"
   },
   "devDependencies": {
-    "electron": "^1.4.3"
+    "electron": "^1.4.13"
   }
 }
