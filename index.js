@@ -57,6 +57,10 @@ function loadMovies(moviesQuality, lastList) {
           if ($movieName.includes(".hc.")) continue;
           if ($movieName.includes(" hc ")) continue;
 
+          // skip cam
+          if ($movieName.includes(".cam.")) continue;
+          if ($movieName.includes(" cam ")) continue;
+
           // leave only pure movie name
           $movieName = getMovieName($movieName);
 
