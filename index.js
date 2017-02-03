@@ -214,7 +214,7 @@ function fillMoviePoster(movieName, id) {
         }
         $("#"+movieInfo["imdbID"]).fadeIn(2000);
         displayedMovies++;
-        document.getElementById("title").innerText = "Electron Movies Browser - displaying " + (displayedMovies-1) + " movies";
+        document.getElementById("title").innerText = "Electron Movies Browser - displaying " + (displayedMovies) + " movies";
       }
       else {
         alert("error: status for " + movieName + " is " + this.status);
