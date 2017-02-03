@@ -217,7 +217,7 @@ function fillMoviePoster(movieName, id) {
         document.getElementById("title").innerText = "Electron Movies Browser - displaying " + (displayedMovies) + " movies";
       }
       else {
-        alert("error: status for " + movieName + " is " + this.status);
+        console.log("error: status for " + movieName + " is " + this.status);
       }
     }
   }
