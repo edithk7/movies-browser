@@ -130,6 +130,24 @@ function fillMoviePoster(movieName, id) {
           return;
         }
 
+	// Skip low rating movies
+	if (movieInfo["imdbRating"] < 6 || movieInfo["imdbRating"] == "N/A") {
+	  console.log("***skipping low rated movie " + movieName + "***");
+          return;
+	}
+
+	// Skip animation movies
+	if (movieInfo["Genre"].toLowerCase().includes("animation")) {
+	  console.log("***skipping animation movie " + movieName + "***");
+          return;
+	}
+
+	// Skip horror movies
+	if (movieInfo["Genre"].toLowerCase().includes("horror")) {
+	  console.log("***skipping animation movie " + movieName + "***");
+          return;
+	}
+
         var li = document.createElement("li");
         var rig_cell = document.createElement("div");
         var rig_img = document.createElement('img');
