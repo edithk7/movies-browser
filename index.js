@@ -14,8 +14,8 @@ var displayedMovies = 0;
 var deletedMoviesFile = path.join(__dirname, "cache/deletedMovies.txt");
 var firstMovieLoaded = false;
 
-loadMovies("HD", false);
-loadMovies("normal", true);
+loadMovies("HD", true);
+//loadMovies("normal", true);
 var stepSize = 12.5;
 
 function loadMovies(moviesQuality, lastList) {
@@ -61,15 +61,23 @@ function loadMovies(moviesQuality, lastList) {
           if ($movieName.includes(".cam.")) continue;
           if ($movieName.includes(" cam ")) continue;
 
-	  // skip hdts
-          if ($movieName.includes(".hdts.")) continue;
+	  if ($movieName.includes(".hdcam.")) continue;
+          if ($movieName.includes(" hdcam ")) continue;
+
+		  // skip hdts
+		  if ($movieName.includes(".hdts.")) continue;
           if ($movieName.includes(" hdts ")) continue;
+          if ($movieName.includes("hd-ts")) continue;
+          if ($movieName.includes("hd-tc")) continue;
+		  if ($movieName.includes(".hdtc.")) continue;
+		  if ($movieName.includes("hdtc")) continue;
 
           // leave only pure movie name
           $movieName = getMovieName($movieName);
 
-          // skip empty movies
-          if ($movieName == "") continue;
+ console.log($movieName);
+        // skip empty movies
+          if ($movieName == "")  continue;
 
           // skip deleted movies
           if (deletedMovies.indexOf($movieName) != -1) continue;
@@ -103,10 +111,10 @@ function loadMovies(moviesQuality, lastList) {
     }
   };
   if (moviesQuality == "HD") {
-    xhttp.open("GET", "https://thepiratebay.org/rss/top100/207", true);
+    xhttp.open("GET", "https://pirateproxy.live/rss/top100/207", true);
   }
   else if (moviesQuality == "normal") {
-    xhttp.open("GET", "https://thepiratebay.org/rss/top100/201", true);
+    xhttp.open("GET", "https://pirateproxy.live/rss/top100/201", true);
   }
   xhttp.send();
 }
@@ -129,24 +137,6 @@ function fillMoviePoster(movieName, id) {
           fs.appendFile(deletedMoviesFile, movieName + "\n");
           return;
         }
-
-	// Skip low rating movies
-	if (movieInfo["imdbRating"] < 6 || movieInfo["imdbRating"] == "N/A") {
-	  console.log("***skipping low rated movie " + movieName + "***");
-          return;
-	}
-
-	// Skip animation movies
-	if (movieInfo["Genre"].toLowerCase().includes("animation")) {
-	  console.log("***skipping animation movie " + movieName + "***");
-          return;
-	}
-
-	// Skip horror movies
-	if (movieInfo["Genre"].toLowerCase().includes("horror")) {
-	  console.log("***skipping animation movie " + movieName + "***");
-          return;
-	}
 
         var li = document.createElement("li");
         var rig_cell = document.createElement("div");
@@ -244,7 +234,7 @@ function fillMoviePoster(movieName, id) {
     }
   }
   var movieSearchString = movieName.replace(/\s/g, '+');
-  movieSearchString = "http://www.omdbapi.com/?t="+movieSearchString+"&y="+moviesYears[movieName]+"&plot=short&r=json";
+  movieSearchString = "http://www.omdbapi.com/?apikey=90c2bc1b&t="+movieSearchString+"&y="+moviesYears[movieName]+"&plot=short&r=json";
   jsonhttp.open("GET", movieSearchString, true);
   jsonhttp.send();
 }
@@ -287,7 +277,7 @@ function deleteMovie(movieName) {
 
 function downloadMovie(movieName) {
   var link = magnetLinks[movieName];
-  open(link);
+  open(link, "qbittorrent");
 }
 
 function openImdb(id) {
@@ -307,12 +297,6 @@ function getMovieReviews(movieId, movieName) {
           $("#no-reviews-container").fadeIn();
         }
 
-        // put p inside div
-        reviewsPageText = reviewsPageText.replace(/<\/div>\n<p>/g, "<p>");
-        reviewsPageText = reviewsPageText.replace(/<\/p>\n\n<div/g, "</p>\n</div>\n\n<div");
-
-        console.log(reviewsPageText);
-
         document.getElementById("reviews").innerHTML = reviewsPageText;
         $("#cover").fadeIn();
         $("#reviews-overlay").fadeIn();
@@ -329,23 +313,43 @@ function getMovieReviews(movieId, movieName) {
 
 function stripMovieReviewsGarbage(reviewsPageText) {
 
-  // no reviews
-  if (reviewsPageText.indexOf("0 reviews in total") != -1) {
-    return "";
-  }
+  var titles = [];
+  var scores = [];
+  var helpfuls = [];
+  var re_titles = /class=\"title\" >(.*)\s*<\/a>/g;
+  var re_score = /<span>(\d+)<\/span><span class=\"point-scale\">\/10<\/span>/g;
+  var re_helpfuls = /<div class=\"actions text-muted\">\s*(\d+) out of (\d+) found this helpful./g;
+  var reviews = "";
 
-  var mark = "</td><\/tr><\/table>\n\n<hr size=\"1\" noshade=\"1\">";
-  var start = reviewsPageText.indexOf(mark) + mark.length;
-  var reviewsPageTextSliced = reviewsPageText.slice(start, reviewsPageText.length);
+  //console.log(reviewsPageText);
+ 
+  var m;
+  do {
+    m = re_titles.exec(reviewsPageText);
+    if (m) {
+        titles.push(m[1]);
+    }
+  } while (m);
 
-  // only 1 reviews
-  if (reviewsPageText.indexOf("1 reviews in total") != -1) {
-    var end = reviewsPageTextSliced.indexOf("<hr noshade=\"1\" size=\"1\" align=\"center\">\n\n<hr size=\"1\" noshade=\"1\">");
+  do {
+    m = re_score.exec(reviewsPageText);
+    if (m) {
+        scores.push(m[1]);
+    }
+  } while (m);
+
+  do {
+    m = re_helpfuls.exec(reviewsPageText);
+    if (m) {
+        helpfuls.push([m[1], m[2]]);
+    }
+  } while (m);
+
+  for (i = 0; i < titles.length; i++) {
+    reviews += "<div><font color=gold>" + scores[i] + "/10</font><br/>" + titles[i] + "<br/><font size=2>" + helpfuls[i][0] + " out of "
+               + helpfuls[i][1] + " found this review helpful</font></div></br>";
   }
-  else {
-    var end = reviewsPageTextSliced.indexOf("<hr noshade=\"1\" size=\"1\" width=\"50%\" align=\"center\">\n\n<hr size=\"1\" noshade=\"1\">");
-  }
-  return reviewsPageTextSliced.slice(0, end);
+  return reviews;
 }
 
 // Bind delete/download/min/max/close buttons

@@ -11,8 +11,8 @@ function createWindow () {
   var screen = require('electron').screen
   var primaryDisplay = screen.getPrimaryDisplay()
 
-  var windowHeight = 900
-  var windowWidth = 1600
+  var windowHeight = 690
+  var windowWidth = 1160
   var displayHeight = primaryDisplay.bounds.height
   var displayWidth = primaryDisplay.bounds.width
 
@@ -26,8 +26,8 @@ function createWindow () {
       frame: false,
       backgroundColor: '#212121',
       darkTheme: true,
-      x: 1360 + center_x, // need to make this portable...
-      y: center_y
+      x: center_x, // need to make this portable...
+      y: center_y + 10
     })
     win.setMenu(null);
   }
