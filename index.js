@@ -163,11 +163,12 @@ function fillMoviePoster(movieName, id) {
         movieInfoText += "<b>Genre</b>: " + movieInfo["Genre"] + "<br/>";
         movieInfoText += "<b>Actors</b>: " + movieInfo["Actors"] + "<br/>";
         movieInfoText += "<b>Rating</b>: " + movieInfo["imdbRating"] + "<br/><br/>";
-        movieInfoText += "<b>Plot</b>: " + movieInfo["Plot"];
 
-        if (movieInfoText.length > 600) {
-          rig_text.style.fontSize = "16px";
-        }
+		plotText = movieInfo["Plot"];
+		if (plotText.length > 150) {
+			plotText = plotText.substring(0,150) + "...";
+		}
+        movieInfoText += "<b>Plot</b>: " + plotText;
 
         rig_text.innerHTML = movieInfoText;
         rig_text.addEventListener('click', function() {
@@ -277,7 +278,7 @@ function deleteMovie(movieName) {
 
 function downloadMovie(movieName) {
   var link = magnetLinks[movieName];
-  open(link, "qbittorrent");
+  open(link, "transmission-gtk");
 }
 
 function openImdb(id) {
