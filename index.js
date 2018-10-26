@@ -312,43 +312,34 @@ function getMovieReviews(movieId, movieName) {
   xhttp.send();
 }
 
+var reviewsHTML;
 function stripMovieReviewsGarbage(reviewsPageText) {
 
   var titles = [];
   var scores = [];
+  var texts = [];
   var helpfuls = [];
-  var re_titles = /class=\"title\" >(.*)\s*<\/a>/g;
-  var re_score = /<span>(\d+)<\/span><span class=\"point-scale\">\/10<\/span>/g;
-  var re_helpfuls = /<div class=\"actions text-muted\">\s*(\d+) out of (\d+) found this helpful./g;
   var reviews = "";
 
   //console.log(reviewsPageText);
- 
-  var m;
-  do {
-    m = re_titles.exec(reviewsPageText);
-    if (m) {
-        titles.push(m[1]);
-    }
-  } while (m);
-
-  do {
-    m = re_score.exec(reviewsPageText);
-    if (m) {
-        scores.push(m[1]);
-    }
-  } while (m);
-
-  do {
-    m = re_helpfuls.exec(reviewsPageText);
-    if (m) {
-        helpfuls.push([m[1], m[2]]);
-    }
-  } while (m);
+  reviewsHTML = reviewsPageText;
+  var reviewsHTMLArray = $(reviewsHTML).find('.imdb-user-review').toArray();
+  reviewsHTMLArray.forEach(function(review) {
+		var reviewScore = $(review).find('.rating-other-user-rating').text().trim();
+		if (reviewScore != "") {
+	    var reviewTitle = $(review).find('.title').text().trim();
+			var reviewText = $(review).find('.text').text().trim();
+			titles.push(reviewTitle);
+			scores.push(reviewScore);
+			texts.push(reviewText);
+		}
+  });
 
   for (i = 0; i < titles.length; i++) {
-    reviews += "<div><font color=gold>" + scores[i] + "/10</font><br/>" + titles[i] + "<br/><font size=2>" + helpfuls[i][0] + " out of "
-               + helpfuls[i][1] + " found this review helpful</font></div></br>";
+		reviews += "<div>	<font color=lightgray size=5>" + titles[i] + "</font><br/> \
+		<font color=gold size=2>" + scores[i] + "</font><br/> \
+		<font size=4>" + texts[i] + "</font></br> \
+		<font size=2>5 out of 12 found this review helpful</font></div><br/>";
   }
   return reviews;
 }
