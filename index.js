@@ -329,9 +329,11 @@ function stripMovieReviewsGarbage(reviewsPageText) {
 		if (reviewScore != "") {
 	    var reviewTitle = $(review).find('.title').text().trim();
 			var reviewText = $(review).find('.text').text().trim();
+			var reviewHelpfulness = $(review).find('.actions').text().trim();
 			titles.push(reviewTitle);
 			scores.push(reviewScore);
 			texts.push(reviewText);
+			helpfuls.push(reviewHelpfulness);
 		}
   });
 
@@ -339,7 +341,7 @@ function stripMovieReviewsGarbage(reviewsPageText) {
 		reviews += "<div>	<font color=lightgray size=5>" + titles[i] + "</font><br/> \
 		<font color=gold size=2>" + scores[i] + "</font><br/> \
 		<font size=4>" + texts[i] + "</font></br> \
-		<font size=2>5 out of 12 found this review helpful</font></div><br/>";
+		<font size=2>" + helpfuls[i].substr(0, helpfuls[i].indexOf('.')) + "</font></div><br/>";
   }
   return reviews;
 }
