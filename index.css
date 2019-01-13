@@ -11,8 +11,8 @@ body {
 
 #no-movies-container {
   position: fixed;
-  top: 40px; bottom: 0; left: 0; right: 0;
-  background-color: rgb(40, 40, 40);
+  top: 10%; bottom: 10%; left: 5%; right: 5%;
+  background-color: rgb(33, 33, 33);
   display: none;
 }
 

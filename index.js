@@ -56,6 +56,7 @@ function loadMovies(moviesQuality, lastList) {
           // skip hardcoded subtitles
           if ($movieName.includes(".hc.")) continue;
           if ($movieName.includes(" hc ")) continue;
+          if ($movieName.includes("korsub")) continue;
 
           // skip cam
           if ($movieName.includes(".cam.")) continue;
@@ -278,7 +279,7 @@ function deleteMovie(movieName) {
 
 function downloadMovie(movieName) {
   var link = magnetLinks[movieName];
-  open(link, "transmission-gtk");
+  open(link);
 }
 
 function openImdb(id) {
