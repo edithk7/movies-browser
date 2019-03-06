@@ -274,7 +274,7 @@ function deleteMovie(movieName) {
   fs.appendFile(deletedMoviesFile, movieName + "\n");
   $("#"+moviesIds[movieName]).hide('slow', function(){ $("#"+moviesIds[movieName]).remove(); });
   displayedMovies--;
-  document.getElementById("title").innerText = "Electron Movies Browser - displaying " + (displayedMovies-1) + " movies";
+  document.getElementById("title").innerText = "Electron Movies Browser - displaying " + (displayedMovies) + " movies";
 }
 
 function downloadMovie(movieName) {
