@@ -6,9 +6,6 @@
     "electron-image-resize": "^1.2.4",
     "open": "^0.0.5"
   },
-  "devDependencies": {
-    "electron": "^4.0.7"
-  },
   "scripts": {
     "start": "electron ."
   }
