@@ -139,8 +139,8 @@ progress::-webkit-progress-value {
 
 .rig-img {
   display:block;
-  width: 100%;
-  height: auto;
+  width: 300px;
+  height: 445px;
   border:none;
   transform:scale(1);
   transition:all 1s;
