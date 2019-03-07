@@ -27,7 +27,7 @@ function createWindow () {
       backgroundColor: '#212121',
       darkTheme: true,
       x: center_x, // need to make this portable...
-      y: center_y - 10
+      y: center_y
     })
     win.setMenu(null);
   }

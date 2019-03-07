@@ -2,7 +2,6 @@ var fs = require('fs');
 var open = require('open');
 var path = require('path');
 var remote = require('electron').remote;
-var electronImageResize = require('electron-image-resize');
 var BrowserWindow = remote.BrowserWindow;
 
 var moviesList = [];
@@ -15,8 +14,6 @@ var deletedMoviesFile = path.join(__dirname, "cache/deletedMovies.txt");
 var firstMovieLoaded = false;
 
 loadMovies("HD", true);
-//loadMovies("normal", true);
-var stepSize = 12.5;
 
 function loadMovies(moviesQuality, lastList) {
   var xhttp = new XMLHttpRequest();
@@ -122,7 +119,7 @@ function loadMovies(moviesQuality, lastList) {
 
 function progressBarDoStep() {
   var pBar = document.getElementById('progress-bar');
-  pBar.value += stepSize;
+  pBar.value += 12.5;
 }
 
 function fillMoviePoster(movieName, id) {
@@ -135,7 +132,9 @@ function fillMoviePoster(movieName, id) {
 
         if (movieInfo["Response"] == "False") {
           console.log("***can't find movie " + movieName + "***");
-          fs.appendFile(deletedMoviesFile, movieName + "\n");
+          fs.appendFile(deletedMoviesFile, movieName + "\n", function (err) {
+                        if (err) throw err;                        
+                        }); 
           return;
         }
 
@@ -196,31 +195,13 @@ function fillMoviePoster(movieName, id) {
         rig_overlay.appendChild(downloadButton);
         rig_overlay.appendChild(deleteButton);
 
-        var cachedImage = path.join(__dirname, "cache/" + movieName + '.jpg');
-
-        // download image if needed
-        fs.stat(cachedImage, function(err, stat) {
-          if(err != null) {
-            if (movieInfo['Poster'] != "N/A") {
-              rig_img.src = movieInfo['Poster'];
-            }
-            else {
-              rig_img.src = path.join(__dirname, "img/NA.jpg");
-            }
-            electronImageResize({
-              url: movieInfo['Poster'],
-              width: 300,
-              height: 445
-            }).then(img => {
-              fs.writeFile(cachedImage, img.toJpeg(100), (err) => {
-                if (err) throw err;
-              });
-            })
-          }
-          else {
-            rig_img.src = cachedImage;
-          }
-        });
+        // set image source
+        if (movieInfo['Poster'] != "N/A") {
+            rig_img.src = movieInfo['Poster'];
+        }
+        else {
+            rig_img.src = path.join(__dirname, "img/NA.jpg");
+        }         
 
         if (!firstMovieLoaded) {
           firstMovieLoaded = true;
@@ -271,7 +252,9 @@ function populateMoviesTable() {
 }
 
 function deleteMovie(movieName) {
-  fs.appendFile(deletedMoviesFile, movieName + "\n");
+  fs.appendFile(deletedMoviesFile, movieName + "\n", function (err) {
+                        if (err) throw err;                        
+                        }); 
   $("#"+moviesIds[movieName]).hide('slow', function(){ $("#"+moviesIds[movieName]).remove(); });
   displayedMovies--;
   document.getElementById("title").innerText = "Electron Movies Browser - displaying " + (displayedMovies) + " movies";
